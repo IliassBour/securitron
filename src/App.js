@@ -21,12 +21,27 @@ export default function App() {
 
   return (
         <div id="app">
-          <p id="id_temp_max">Température maximale : {tempMax} °C</p>
-          <p id="id_temp_min">Température minimale : {tempMin} °C</p>
-          <p id="id_temp_moy">Température moyenne : {tempMoy} °C</p>
-          <p id="id_sound_max">Niveau sonore maximale : {soundMax} dB</p>
-          <p id="id_sound_min">Niveau sonore minimale : {soundMin} dB</p>
-          <p id="id_sound_moy">Niveau sonore moyen : {soundMoy} dB</p>
+            <div id="content">
+                <div className="table">
+                    <p className="table_title">Température</p>
+                    <div>
+                        <p className="data">Maximale : {tempMax} °C</p>
+                        <p className="data">Minimale : {tempMin} °C</p>
+                        <p className="data">Moyenne : {tempMoy} °C</p>
+                    </div>
+                </div>
+                <div className="table">
+                    <p className="table_title">Niveau sonore</p>
+                    <div>
+                        <p className="data">Maximale : {soundMax} dB</p>
+                        <p className="data">Minimale : {soundMin} dB</p>
+                        <p className="data">Moyen : {soundMoy} dB</p>
+                    </div>
+                </div>
+            </div>
+
+
+
           <button id="btn_reset"onClick={() => getNextData()}> Saisir prochaines valeurs</button>
         </div>
     );
