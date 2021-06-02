@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#top_bar  {
+  width: 100%;
+  background-color: #056e7d;
+  display: flex;
+  flex-direction: row;
+}
+
+#title  {
+  color: #ffffff;
+  font-family: "Baskerville Old Face";
+  font-size: 2rem;
+  flex-grow: 2;
+}
+
+#logo  {
+  flex-grow: 1;
+  color: #ffffff;
+}
+
+#app {
+  align-items: center;
+}
+
+#btn_reset {
+  margin: 10px;
+}
