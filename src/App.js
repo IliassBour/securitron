@@ -1,49 +1,53 @@
-import React, {useState} from "react";
-import { ApiRequest } from "./apiRequest";
+import React, { useState, useEffect } from 'react';
+import { ApiRequest } from './api/apiRequest';
+import {CircularProgress, IconButton, Grid, Box,
+  Container,
+  CardContent,} from '@material-ui/core';
+import ReplayIcon from '@material-ui/icons/Replay';
+import {TopBar} from './components/topBar';
+import {TableWrapper} from './components/table/table-grid';
+
+
 
 export default function App() {
-  const request = new ApiRequest("192.168.1.10");
-  const [tempMax, setTempMax] = useState(request.getTempMax());
-  const [tempMin, setTempMin] = useState(request.getTempMin());
-  const [tempMoy, setTempMoy] = useState(request.getTempMoy());
-  const [soundMax, setSoundMax] = useState(request.getSoundMax());
-  const [soundMin, setSoundMin] = useState(request.getSoundMin());
-  const [soundMoy, setSoundMoy] = useState(request.getSoundMoy());
+  
+  const request = new ApiRequest('http://192.168.1.10');
 
-  function getNextData() {
-    setTempMax(request.getTempMax());
-    setTempMin(request.getTempMin());
-    setTempMoy(request.getTempMoy());
-    setSoundMax(request.getSoundMax());
-    setSoundMin(request.getSoundMin());
-    setSoundMoy(request.getSoundMoy());
+  const [allData, setAllData] = useState();
+
+  async function handleRequest() {
+    console.log('Call getNextData');
+    setAllData(await request.getAllData());
+  }
+
+  useEffect(() => {
+    handleRequest();
+  }, []);
+
+  console.log(allData);
+
+  if (!allData) {
+    return <CircularProgress style={{position: 'absolute',   left: "50%",
+    top: "50%"}} disableShrink />;
   }
 
   return (
-        <div id="app">
-            <div id="content">
-                <div className="table">
-                    <p className="table_title">Température</p>
-                    <div>
-                        <p className="data">Maximale : {tempMax} °C</p>
-                        <p className="data">Minimale : {tempMin} °C</p>
-                        <p className="data">Moyenne : {tempMoy} °C</p>
-                    </div>
-                </div>
-                <div className="table">
-                    <p className="table_title">Niveau sonore</p>
-                    <div>
-                        <p className="data">Maximale : {soundMax} dB</p>
-                        <p className="data">Minimale : {soundMin} dB</p>
-                        <p className="data">Moyen : {soundMoy} dB</p>
-                    </div>
-                </div>
-            </div>
+    <div id="app">
+      <TopBar />
+      <Grid
+        container
+        justify="center"
+        direction="column"
+        style={{paddingTop: '2.5em'}}
+      >
 
+      <TableWrapper data={allData}/>
 
+      <IconButton aria-label="delete" style={{ width:'fit-content', margin:'1em auto'}} size="medium" onClick={() => handleRequest()}>
+        <ReplayIcon />
+      </IconButton>
 
-          <button id="btn_reset"onClick={() => getNextData()}> Saisir prochaines valeurs</button>
-        </div>
-    );
-};
-
+      </Grid>
+    </div>
+  );
+}

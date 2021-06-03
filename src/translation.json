@@ -1,0 +1,10 @@
+{
+  "Translation": {
+    "temperature": { "fr": "Température", "en": "Temperature" },
+    "sound": { "fr": "Niveau Sonore", "en": "Level of Sound" }
+  },
+  "Units" : {
+    "temperature": { "fr": "°C", "en": "°C" },
+    "sound": { "fr": "dB", "en": "dB" }
+  }
+}
