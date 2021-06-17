@@ -3,9 +3,12 @@ export class ApiRequest {
         this.linkServer = linkServer;
         this.tempMax = 0;
         this.tempMin = 0;
+        this.tempAvg = 0;
+        this.tempCurrent = 0;
         this.soundMax = 0;
         this.soundMin = 0;
         this.soundAvg = 0;
+        this.soundCurrent = 0;
         this.allData = {};
     }
     
@@ -75,6 +78,24 @@ export class ApiRequest {
         return this.tempAvg ?? 0;
     }
 
+  getTempCurrent() {
+    console.log("Call getTempCurrent");
+    console.log("TempCurrent Debut : " + this.tempCurrent);
+    fetch(this.linkServer + "/api/temperature/current", {
+      "method": "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.tempCurrent = data["value"];
+        console.log("TempCurrent Current : " + this.tempCurrent)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    console.log("TempCurrent fin : " + this.tempCurrent);
+    return this.tempCurrent ?? 0;
+  }
+
     getSoundMax() {
         fetch(this.linkServer + "/api/sound/max", {
             "method": "GET"
@@ -116,4 +137,18 @@ export class ApiRequest {
             });
         return this.soundAvg ?? 0;
     }
+
+  getSoundCurrent() {
+    fetch(this.linkServer + "/api/sound/current", {
+      "method": "GET"
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.soundCurrent = data["value"];
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    return this.soundCurrent ?? 0;
+  }
 };
