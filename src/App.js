@@ -27,7 +27,7 @@ export default function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       handleRequest();
-    }, 5000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 

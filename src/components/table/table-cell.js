@@ -24,6 +24,9 @@ export const TableInfo = ({ data }) => {
       </Typography>
       <Table size="small" aria-label="a dense table">
         <TableBody>
+        <TableRow key={'max'}>
+            <TableCell align="center" colSpan={2} style={{fontSize: "50px"}} >{data.current !== undefined ? `${data.current} ${unit}` : 'Aucune donnée'}</TableCell>
+          </TableRow>
           <TableRow key={'max'}>
             <TableCell component="th" scope="row">
               Maximum
