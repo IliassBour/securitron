@@ -34,13 +34,13 @@ export const TableInfo = ({ data }) => {
             <TableCell component="th" scope="row">
               Minimum
             </TableCell>
-            <TableCell align="right">{data.min ? `${data.min} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="right">{data.min !== undefined  ? `${data.min} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
           <TableRow key={'avg'}>
             <TableCell component="th" scope="row">
               Moyenne
             </TableCell>
-            <TableCell align="right">{data.avg ? `${data.avg} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="right">{data.avg !== undefined ? `${data.avg} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

@@ -24,6 +24,13 @@ export default function App() {
     handleRequest();
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleRequest();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   console.log(allData);
 
   if (!allData) {
@@ -44,7 +51,7 @@ export default function App() {
       <TableWrapper data={allData}/>
 
       <IconButton aria-label="delete" style={{ width:'fit-content', margin:'1em auto'}} size="medium" onClick={() => handleRequest()}>
-        <ReplayIcon />
+        <ReplayIcon /> 
       </IconButton>
 
       </Grid>
