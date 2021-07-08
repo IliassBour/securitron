@@ -25,25 +25,25 @@ export const TableInfo = ({ data }) => {
       <Table size="small" aria-label="a dense table">
         <TableBody>
         <TableRow key={'max'}>
-            <TableCell align="center" colSpan={2} style={{fontSize: "50px"}} >{data.current !== undefined ? `${data.current} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="center" colSpan={2} style={{fontSize: "50px"}} >{data.current !== null ? `${data.current} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
           <TableRow key={'max'}>
             <TableCell component="th" scope="row">
               Maximum
             </TableCell>
-            <TableCell align="right">{data.max !== undefined ? `${data.max} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="right">{data.max !== null ? `${data.max} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
           <TableRow key={'min'}>
             <TableCell component="th" scope="row">
               Minimum
             </TableCell>
-            <TableCell align="right">{data.min !== undefined  ? `${data.min} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="right">{data.min !== null  ? `${data.min} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
           <TableRow key={'avg'}>
             <TableCell component="th" scope="row">
               Moyenne
             </TableCell>
-            <TableCell align="right">{data.avg !== undefined ? `${data.avg} ${unit}` : 'Aucune donnée'}</TableCell>
+            <TableCell align="right">{data.avg !== null ? `${data.avg} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
