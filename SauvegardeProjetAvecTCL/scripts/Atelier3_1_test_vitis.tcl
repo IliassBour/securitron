@@ -62,7 +62,12 @@ proc checkRequiredFiles { origin_dir} {
    "$origin_dir/../vhdSources/CTRL_AD1_TB.vhd" \
    "$origin_dir/../vhdSources/Synchro_tb.vhd" \
    "$origin_dir/../vhdSources/CTRL_DA1_tb.vhd" \
+   "$origin_dir/../vhdSources/reg_dec_donnees.vhd" \
+   "$origin_dir/../vhdSources/traitement_son_moy.vhd" \
+   "$origin_dir/../vhdSources/traitement_temp_min_max.vhd" \
+   "$origin_dir/../vhdSources/traitement_temp_moy.vhd" \
   ]
+  # INSERT NEW FILES HERE ^^^
 
   foreach ifile $files {
     if { ![file isfile $ifile] } {
@@ -222,7 +227,12 @@ set files [list \
  [file normalize "${origin_dir}/../vhdSources/Synchro_Horloges.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/reg_dec_12b.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/Top.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/reg_dec_donnees.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/traitement_son_moy.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/traitement_temp_min_max.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/traitement_temp_moy.vhd"]\
 ]
+# INSERT NEW FILES HERE
 
 # Set 'sources_1' fileset file properties for remote files
 # None
@@ -231,7 +241,7 @@ set files [list \
 add_files -norecurse -fileset $obj $files
 
 # Set 'sources_1' fileset file properties for local files
-
+# INSERT NEW FILES HERE
 set file "$origin_dir/../vhdSources/AD7476_mef.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
@@ -258,6 +268,26 @@ set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
 
 set file "$origin_dir/../vhdSources/reg_dec_12b.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/reg_dec_donnees.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/traitement_son_moy.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/traitement_temp_min_max.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/traitement_temp_moy.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
 set_property -name "file_type" -value "VHDL" -objects $file_obj
