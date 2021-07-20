@@ -180,8 +180,15 @@ architecture Behavioral of Top is
         Pmod_8LD_pin7_io : inout STD_LOGIC;
         Pmod_8LD_pin8_io : inout STD_LOGIC;
         Pmod_8LD_pin9_io : inout STD_LOGIC;
-        i_data_echantillon : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_data_son : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_data_temp : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_min : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_moy : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_sw_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
+        i_temp_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_temp_min : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_temp_moy : in STD_LOGIC_VECTOR ( 11 downto 0 );
         o_data_out : out STD_LOGIC_VECTOR ( 31 downto 0 );
         o_leds_tri_o : out STD_LOGIC_VECTOR ( 3 downto 0 )
       );
@@ -370,7 +377,14 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_echantillon => d_temp_min,
+        i_data_son => d_echantillon,
+        i_data_temp => d_echantillon,
+        i_son_max => d_son_moy,
+        i_son_min => d_son_moy,
+        i_son_moy => d_son_moy,
+        i_temp_max => d_temp_max,
+        i_temp_min => d_temp_min,
+        i_temp_moy => d_temp_moy,
         i_sw_tri_i => i_sw,
         o_data_out => open,
         o_leds_tri_o => o_leds

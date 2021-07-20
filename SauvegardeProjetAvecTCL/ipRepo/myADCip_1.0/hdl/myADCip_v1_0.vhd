@@ -16,8 +16,15 @@ entity myADCip_v1_0 is
 	);
 	port (
 		-- Users to add ports here
-        i_data_echantillon : in std_logic_vector(11 downto 0);
-        o_data_out : out std_logic_vector(31 downto 0);
+        i_data_temp : in std_logic_vector(11 downto 0);
+        i_temp_moy  : in std_logic_vector(11 downto 0);
+        i_temp_min  : in std_logic_vector(11 downto 0);
+        i_temp_max  : in std_logic_vector(11 downto 0);
+        i_data_son  : in std_logic_vector(11 downto 0);
+        i_son_moy   : in std_logic_vector(11 downto 0);
+        i_son_min   : in std_logic_vector(11 downto 0);
+        i_son_max   : in std_logic_vector(11 downto 0);
+        o_data_out  : out std_logic_vector(31 downto 0);
 		-- User ports ends
 		-- Do not modify the ports beyond this line
 
@@ -56,7 +63,14 @@ architecture arch_imp of myADCip_v1_0 is
 		C_S_AXI_ADDR_WIDTH	: integer	:= 4
 		);
 		port (
-		i_data_echantillon : in std_logic_vector(11 downto 0);
+		i_data_temp : in std_logic_vector(11 downto 0);
+        i_temp_moy  : in std_logic_vector(11 downto 0);
+        i_temp_min  : in std_logic_vector(11 downto 0);
+        i_temp_max  : in std_logic_vector(11 downto 0);
+        i_data_son  : in std_logic_vector(11 downto 0);
+        i_son_moy   : in std_logic_vector(11 downto 0);
+        i_son_min   : in std_logic_vector(11 downto 0);
+        i_son_max   : in std_logic_vector(11 downto 0);
         o_data_out : out std_logic_vector(31 downto 0);
 		
 		S_AXI_ACLK	: in std_logic;
@@ -92,7 +106,14 @@ myADCip_v1_0_S00_AXI_inst : myADCip_v1_0_S00_AXI
 		C_S_AXI_ADDR_WIDTH	=> C_S00_AXI_ADDR_WIDTH
 	)
 	port map (
-	    i_data_echantillon => i_data_echantillon,
+	    i_data_temp => i_data_temp,
+	    i_temp_moy => i_temp_moy,
+	    i_temp_min => i_temp_min,
+	    i_temp_max => i_temp_max,
+	    i_data_son => i_data_son,
+	    i_son_moy => i_son_moy,
+	    i_son_min => i_son_min,
+	    i_son_max => i_son_max,
         o_data_out => o_data_out,
         
 		S_AXI_ACLK	=> s00_axi_aclk,

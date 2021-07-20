@@ -199,7 +199,7 @@
       <spirit:parameters>
         <spirit:parameter>
           <spirit:name>POLARITY</spirit:name>
-          <spirit:value spirit:id="BUSIFPARAM_VALUE.S00_AXI_RST.POLARITY" spirit:choiceRef="choice_list_74b5137e">ACTIVE_LOW</spirit:value>
+          <spirit:value spirit:id="BUSIFPARAM_VALUE.S00_AXI_RST.POLARITY" spirit:choiceRef="choice_list_9d8b0d81">ACTIVE_LOW</spirit:value>
         </spirit:parameter>
       </spirit:parameters>
     </spirit:busInterface>
@@ -266,7 +266,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>5150281b</spirit:value>
+            <spirit:value>344ff322</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -282,7 +282,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>5150281b</spirit:value>
+            <spirit:value>344ff322</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -296,7 +296,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>c8d80c11</spirit:value>
+            <spirit:value>365bf047</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -331,7 +331,126 @@
     </spirit:views>
     <spirit:ports>
       <spirit:port>
-        <spirit:name>i_data_echantillon</spirit:name>
+        <spirit:name>i_data_temp</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_temp_moy</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_temp_min</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_temp_max</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_data_son</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_son_moy</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_son_min</spirit:name>
+        <spirit:wire>
+          <spirit:direction>in</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">11</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic_vector</spirit:typeName>
+              <spirit:viewNameRef>xilinx_vhdlsynthesis</spirit:viewNameRef>
+              <spirit:viewNameRef>xilinx_vhdlbehavioralsimulation</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+        </spirit:wire>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>i_son_max</spirit:name>
         <spirit:wire>
           <spirit:direction>in</spirit:direction>
           <spirit:vector>
@@ -695,7 +814,7 @@
       <spirit:enumeration>32</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_list_74b5137e</spirit:name>
+      <spirit:name>choice_list_9d8b0d81</spirit:name>
       <spirit:enumeration>ACTIVE_HIGH</spirit:enumeration>
       <spirit:enumeration>ACTIVE_LOW</spirit:enumeration>
     </spirit:choice>
@@ -715,7 +834,7 @@
       <spirit:file>
         <spirit:name>hdl/myADCip_v1_0.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_87aa4d8b</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_a3ef9606</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -844,8 +963,8 @@
         <xilinx:taxonomy>AXI_Peripheral</xilinx:taxonomy>
       </xilinx:taxonomies>
       <xilinx:displayName>myADCip_v1.0</xilinx:displayName>
-      <xilinx:coreRevision>2</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2021-06-13T19:11:40Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>3</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2021-07-20T02:04:05Z</xilinx:coreCreationDateTime>
       <xilinx:tags>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@4bec99e2_ARCHIVE_LOCATION">d:/Xilinx_project/ip_repo/myADCip_1.0</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@43af6698_ARCHIVE_LOCATION">d:/Xilinx_project/ip_repo/myADCip_1.0</xilinx:tag>
@@ -867,14 +986,41 @@
         <xilinx:tag xilinx:name="ui.data.coregen.dd@7e61358_ARCHIVE_LOCATION">d:/Xilinx_project/ip_repo/myADCip_1.0</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@78eb0acc_ARCHIVE_LOCATION">d:/Xilinx_project/ip_repo/myADCip_1.0</xilinx:tag>
         <xilinx:tag xilinx:name="ui.data.coregen.dd@5e882fd2_ARCHIVE_LOCATION">d:/Xilinx_project/ip_repo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@72c56571_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6c732247_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@470abe85_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@71a0b7b0_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7cc10496_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@46d4760d_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@765650fc_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6baf6221_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@34aa744d_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7647e1c0_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@64998f1f_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@116fc4c9_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@3fc83461_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@f844ec3_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@72e0df1a_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@3cd6a75f_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@2c9e0c47_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@4e502164_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@e7aa40_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@8126777_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@55fdc0d7_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@7b809871_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@16b409c_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@6c7b3b34_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@61167f9f_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@548b6f24_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
+        <xilinx:tag xilinx:name="ui.data.coregen.dd@465a6c40_ARCHIVE_LOCATION">d:/temp/Git/securitron/SauvegardeProjetAvecTCL/ipRepo/myADCip_1.0</xilinx:tag>
       </xilinx:tags>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2020.2</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="7a6aebf4"/>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="7a63f3fc"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="ed1368d5"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="85a901e4"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="cbad7a16"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="9f59d9c7"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="437d06fc"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="6992ea72"/>
       <xilinx:checksum xilinx:scope="parameters" xilinx:value="f176a3c3"/>
     </xilinx:packagingInfo>
