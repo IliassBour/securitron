@@ -204,7 +204,14 @@ proc create_root_design { parentCell } {
 
 
   # Create ports
-  set i_data_echantillon [ create_bd_port -dir I -from 11 -to 0 i_data_echantillon ]
+  set i_data_son [ create_bd_port -dir I -from 11 -to 0 i_data_son ]
+  set i_data_temp [ create_bd_port -dir I -from 11 -to 0 i_data_temp ]
+  set i_son_max [ create_bd_port -dir I -from 11 -to 0 i_son_max ]
+  set i_son_min [ create_bd_port -dir I -from 11 -to 0 i_son_min ]
+  set i_son_moy [ create_bd_port -dir I -from 11 -to 0 i_son_moy ]
+  set i_temp_max [ create_bd_port -dir I -from 11 -to 0 i_temp_max ]
+  set i_temp_min [ create_bd_port -dir I -from 11 -to 0 i_temp_min ]
+  set i_temp_moy [ create_bd_port -dir I -from 11 -to 0 i_temp_moy ]
   set o_data_out [ create_bd_port -dir O -from 31 -to 0 o_data_out ]
 
   # Create instance: PmodGPIO_0, and set properties
@@ -215,7 +222,7 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.C_ALL_INPUTS {1} \
    CONFIG.C_ALL_OUTPUTS {0} \
-   CONFIG.C_GPIO_WIDTH {4}\
+   CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.GPIO_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_0
@@ -225,7 +232,7 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.C_ALL_INPUTS {0} \
    CONFIG.C_ALL_OUTPUTS {1} \
-   CONFIG.C_GPIO_WIDTH {4}\
+   CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.GPIO_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_1
@@ -730,7 +737,14 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M05_AXI [get_bd_intf_pins myADCip_0/S00_AXI] [get_bd_intf_pins ps7_0_axi_periph/M05_AXI]
 
   # Create port connections
-  connect_bd_net -net i_data_echantillon_0_1 [get_bd_ports i_data_echantillon] [get_bd_pins myADCip_0/i_data_echantillon]
+  connect_bd_net -net i_data_son_0_1 [get_bd_ports i_data_son] [get_bd_pins myADCip_0/i_data_son]
+  connect_bd_net -net i_data_temp_0_1 [get_bd_ports i_data_temp] [get_bd_pins myADCip_0/i_data_temp]
+  connect_bd_net -net i_son_max_0_1 [get_bd_ports i_son_max] [get_bd_pins myADCip_0/i_son_max]
+  connect_bd_net -net i_son_min_0_1 [get_bd_ports i_son_min] [get_bd_pins myADCip_0/i_son_min]
+  connect_bd_net -net i_son_moy_0_1 [get_bd_ports i_son_moy] [get_bd_pins myADCip_0/i_son_moy]
+  connect_bd_net -net i_temp_max_0_1 [get_bd_ports i_temp_max] [get_bd_pins myADCip_0/i_temp_max]
+  connect_bd_net -net i_temp_min_0_1 [get_bd_ports i_temp_min] [get_bd_pins myADCip_0/i_temp_min]
+  connect_bd_net -net i_temp_moy_0_1 [get_bd_ports i_temp_moy] [get_bd_pins myADCip_0/i_temp_moy]
   connect_bd_net -net myADCip_0_o_data_out [get_bd_ports o_data_out] [get_bd_pins myADCip_0/o_data_out]
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins PmodGPIO_0/s_axi_aclk] [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins axi_gpio_1/s_axi_aclk] [get_bd_pins myADCip_0/s00_axi_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/M02_ACLK] [get_bd_pins ps7_0_axi_periph/M03_ACLK] [get_bd_pins ps7_0_axi_periph/M04_ACLK] [get_bd_pins ps7_0_axi_periph/M05_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]

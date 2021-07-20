@@ -204,8 +204,11 @@ architecture Behavioral of Top is
     
     signal d_echantillon_pret_strobe    : std_logic;
 --    signal d_ADC_Dselect                : std_logic; 
-    signal d_echantillon                : std_logic_vector (11 downto 0);
+    signal d_echantillon_son            : std_logic_vector (11 downto 0);
     signal d_son_moy                    : std_logic_vector (11 downto 0);
+    signal d_son_min                    : std_logic_vector (11 downto 0);
+    signal d_son_max                    : std_logic_vector (11 downto 0);
+    signal d_echantillon_temp           : std_logic_vector (11 downto 0);
     signal d_temp_moy                   : std_logic_vector (11 downto 0);
     signal d_temp_min                   : std_logic_vector (11 downto 0);
     signal d_temp_max                   : std_logic_vector (11 downto 0);
@@ -248,8 +251,8 @@ begin
         
         i_ADC_Strobe                => strobe_ADC,              -- synchronisation: déclencheur de la séquence d'échantillonnage 
         o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une réception complète d'un échantillon 
-        o_echantillon_sound         => open,                -- valeur de l'échantillon reçu (12 bits)
-        o_echantillon_temp          => d_echantillon
+        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'échantillon reçu (12 bits)
+        o_echantillon_temp          => d_echantillon_temp
     );
 
     Controleur_DAC :  Ctrl_DA1
@@ -267,7 +270,7 @@ begin
         i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
-        i_data_echantillon => d_echantillon,
+        i_data_echantillon => d_echantillon_son,
         o_data_son_moy => d_son_moy
     );
     
@@ -276,7 +279,7 @@ begin
         i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
-        i_data_echantillon => d_echantillon,
+        i_data_echantillon => d_echantillon_temp,
         o_data_temp_moy => d_temp_moy
     );
       
@@ -285,7 +288,7 @@ begin
         i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => d_reset,
-        i_data_echantillon => d_echantillon,
+        i_data_echantillon => d_echantillon_temp,
         o_data_temp_min => d_temp_min,
         o_data_temp_max => d_temp_max
     );
@@ -377,10 +380,10 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_son => d_echantillon,
-        i_data_temp => d_echantillon,
-        i_son_max => d_son_moy,
-        i_son_min => d_son_moy,
+        i_data_son => d_echantillon_son,
+        i_data_temp => d_echantillon_temp,
+        i_son_max => d_son_max,
+        i_son_min => d_son_min,
         i_son_moy => d_son_moy,
         i_temp_max => d_temp_max,
         i_temp_min => d_temp_min,
