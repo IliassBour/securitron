@@ -94,13 +94,15 @@ architecture Behavioral of Top_tb is
     port ( 
         reset                       : in    std_logic;
         
-        clk_ADC                     : in    std_logic;                      -- Horloge fourni à l'ADC
-        i_DO                        : in    std_logic;                      -- Bit de donnée en provenance de l'ADC           
+        clk_ADC                     : in    std_logic;                      -- Horloge fourni ï¿½ l'ADC
+        i_DO_sound                        : in    std_logic;                -- Bit de donnï¿½e en provenance de l'ADC pour le son
+        i_DO_temp                        : in    std_logic;          
         o_ADC_nCS                   : out   std_logic;                      -- Signal Chip select vers l'ADC 
         
-        i_ADC_Strobe                : in    std_logic;                      -- synchronisation: déclencheur de la séquence d'échantillonnage  
-        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une réception complète d'un échantillon  
-        o_echantillon               : out   std_logic_vector (11 downto 0)  -- valeur de l'échantillon reçu
+        i_ADC_Strobe                : in    std_logic;                      -- synchronisation: dï¿½clencheur de la sï¿½quence d'ï¿½chantillonnage  
+        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon  
+        o_echantillon_sound               : out   std_logic_vector (11 downto 0); -- valeur de l'ï¿½chantillon reï¿½u son
+        o_echantillon_temp               : out   std_logic_vector (11 downto 0) -- valeur de l'ï¿½chantillon reï¿½u tempï¿½rature
     );
     end  component;
     
@@ -110,14 +112,15 @@ architecture Behavioral of Top_tb is
          clk_DAC : in std_logic;
          o_DAC_SYNC : out std_logic;
          i_DAC_Strobe : in std_logic;
-         o_signal_analogique : out std_logic
+         o_signal_analogique_sound : out std_logic;
+         o_signal_analogique_temp : out std_logic
     );
     end component;
    
     component Synchro_Horloges is
     generic (const_CLK_syst_MHz: integer := freq_sys_MHz);
     Port ( 
-        clkm        : in  std_logic;  -- Entrée  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
+        clkm        : in  std_logic;  -- Entrï¿½e  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
         o_S_5MHz    : out std_logic;  -- source horloge divisee          (clkm MHz / (2*constante_diviseur_p +2) devrait donner 5 MHz soit 200 ns)
         o_CLK_5MHz  : out std_logic;
         o_S_100Hz   : out  std_logic; -- source horloge 100 Hz : out  std_logic;   -- (100  Hz approx:  99,952 Hz) 
@@ -181,15 +184,18 @@ end process;
         reset                       => reset,
         
         clk_ADC                     => clk_5MHz,                    -- pour horloge externe de l'ADC 
-        i_DO                        => d_ADC_Dselect,               -- bit de données provenant de l'ADC (via um mux)       
+        i_DO_sound                        => i_ADC_D0,               -- bit de donnï¿½es provenant de l'ADC (via um mux)       
+        i_DO_temp => i_ADC_D1,
         o_ADC_nCS                   => o_ADC_NCS,                   -- chip select pour le convertisseur (ADC )
         
-        i_ADC_Strobe                => strobe_DAC, --strobe_ADC,              -- synchronisation: déclencheur de la séquence d'échantillonnage 
-        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une réception complète d'un échantillon 
-        o_echantillon               => d_echantillon                -- valeur de l'échantillon reçu (12 bits)
+        i_ADC_Strobe                => strobe_DAC, --strobe_ADC,              -- synchronisation: dï¿½clencheur de la sï¿½quence d'ï¿½chantillonnage 
+        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon 
+        o_echantillon_sound               => open,                -- valeur de l'ï¿½chantillon reï¿½u (12 bits)
+        o_echantillon_temp => d_echantillon
     );
     
-    d_ADC_Dselect <= o_DAC_D0;
+    i_ADC_D0 <= o_DAC_D0;
+    i_ADC_D1 <= o_DAC_D1;
     
     Controleur_DAC :  Ctrl_DA1
     port map(
@@ -197,7 +203,8 @@ end process;
         clk_DAC => clk_5MHz,
         o_DAC_SYNC => o_DAC_NCS,
         i_DAC_Strobe => strobe_DAC,
-        o_signal_analogique => o_DAC_D0
+        o_signal_analogique_sound => o_DAC_D0,
+        o_signal_analogique_temp => o_DAC_D1
     );
       
    Synchronisation : Synchro_Horloges

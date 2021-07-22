@@ -81,9 +81,7 @@ constant mem_temperature : table_forme := (
 -- forme d'une onde carrée
 -- ** Mettre un 8 en LSB pour lerreur du bruit (+/- 8) pour pas modifier nos valeurs
 -- et modifier la taille du vecteur -> nbEchantillonMemoire
-x"d88", -- -40 oC
 x"6e8", -- 110 oC
-x"da8",
 x"608",
 x"5e8",
 x"508",
@@ -99,10 +97,12 @@ x"0e8",
 x"008",
 x"ff8",
 x"f08",
+x"da8",
 x"ef8",
 x"e08",
 x"df8",
 x"0a8",
+x"d88", -- -40 oC
 x"d88",
 x"6e8"
 );

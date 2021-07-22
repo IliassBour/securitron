@@ -89,6 +89,37 @@ architecture Behavioral of Top is
     );
     end component;
    
+   component traitement_son_moy is
+      port (
+        i_clk                         : in    std_logic;
+        i_strobe                      : in    std_logic;
+        i_reset                       : in    std_logic;
+        i_data_echantillon            : in    std_logic_vector(11 downto 0);
+        o_data_son_moy                : out   std_logic_vector(11 downto 0)
+      );
+    end component;
+    
+    component traitement_temp_moy is
+      port (
+        i_clk                         : in    std_logic;
+        i_strobe                      : in    std_logic;
+        i_reset                       : in    std_logic;
+        i_data_echantillon            : in    std_logic_vector(11 downto 0);
+        o_data_temp_moy               : out   std_logic_vector(11 downto 0)
+      );
+    end component;
+    
+    component traitement_temp_min_max is
+      port (
+        i_clk                         : in    std_logic;
+        i_strobe                      : in    std_logic;
+        i_reset                       : in    std_logic;
+        i_data_echantillon            : in    std_logic_vector(11 downto 0);
+        o_data_temp_min               : out   std_logic_vector(11 downto 0);
+        o_data_temp_max               : out   std_logic_vector(11 downto 0)
+      );
+    end component;
+   
     component Synchro_Horloges is
     generic (const_CLK_syst_MHz: integer := freq_sys_MHz);
     Port ( 
@@ -149,8 +180,15 @@ architecture Behavioral of Top is
         Pmod_8LD_pin7_io : inout STD_LOGIC;
         Pmod_8LD_pin8_io : inout STD_LOGIC;
         Pmod_8LD_pin9_io : inout STD_LOGIC;
-        i_data_echantillon : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_data_son : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_data_temp : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_min : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_son_moy : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_sw_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
+        i_temp_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_temp_min : in STD_LOGIC_VECTOR ( 11 downto 0 );
+        i_temp_moy : in STD_LOGIC_VECTOR ( 11 downto 0 );
         o_data_out : out STD_LOGIC_VECTOR ( 31 downto 0 );
         o_leds_tri_o : out STD_LOGIC_VECTOR ( 3 downto 0 )
       );
@@ -166,7 +204,14 @@ architecture Behavioral of Top is
     
     signal d_echantillon_pret_strobe    : std_logic;
 --    signal d_ADC_Dselect                : std_logic; 
-    signal d_echantillon                : std_logic_vector (11 downto 0); 
+    signal d_echantillon_son            : std_logic_vector (11 downto 0);
+    signal d_son_moy                    : std_logic_vector (11 downto 0);
+    signal d_son_min                    : std_logic_vector (11 downto 0);
+    signal d_son_max                    : std_logic_vector (11 downto 0);
+    signal d_echantillon_temp           : std_logic_vector (11 downto 0);
+    signal d_temp_moy                   : std_logic_vector (11 downto 0);
+    signal d_temp_min                   : std_logic_vector (11 downto 0);
+    signal d_temp_max                   : std_logic_vector (11 downto 0);
 
     signal compteur_en               : std_logic := '0';  -- cadence echantillonnage AD1
     signal compteur_reset                        : std_logic;
@@ -175,11 +220,16 @@ architecture Behavioral of Top is
     
     signal strobe_1Hz : std_logic;
     
+    signal compteur_1min : integer := 0;
+    signal reset_1min : std_logic;
+    signal d_reset : std_logic;
+    
     signal lecture : std_logic := '0';
     signal strobe_DAC : std_logic;
     signal d_S_1Hz_minus_1 : std_logic;
 begin
-    reset    <= i_btn(0);    
+    reset    <= i_btn(0);
+    d_reset <= reset or reset_1min;
         
 --     mux_select_Entree_AD1 : process (i_btn(3), i_ADC_D0, i_ADC_D1)
 --     begin
@@ -201,8 +251,8 @@ begin
         
         i_ADC_Strobe                => strobe_ADC,              -- synchronisation: déclencheur de la séquence d'échantillonnage 
         o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une réception complète d'un échantillon 
-        o_echantillon_sound         => open,                -- valeur de l'échantillon reçu (12 bits)
-        o_echantillon_temp          => d_echantillon
+        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'échantillon reçu (12 bits)
+        o_echantillon_temp          => d_echantillon_temp
     );
 
     Controleur_DAC :  Ctrl_DA1
@@ -213,6 +263,34 @@ begin
         i_DAC_Strobe => strobe_DAC,
         o_signal_analogique_sound => o_DAC_D0,
         o_signal_analogique_temp => o_DAC_D1
+    );
+    
+    Son_moy : traitement_son_moy
+    port map(
+        i_clk => clk_5MHz,
+        i_strobe => d_echantillon_pret_strobe,
+        i_reset => reset,
+        i_data_echantillon => d_echantillon_son,
+        o_data_son_moy => d_son_moy
+    );
+    
+    Temp_moy : traitement_temp_moy
+    port map(
+        i_clk => clk_5MHz,
+        i_strobe => d_echantillon_pret_strobe,
+        i_reset => reset,
+        i_data_echantillon => d_echantillon_temp,
+        o_data_temp_moy => d_temp_moy
+    );
+      
+    Temp_min_max : traitement_temp_min_max
+    port map(
+        i_clk => clk_5MHz,
+        i_strobe => d_echantillon_pret_strobe,
+        i_reset => d_reset,
+        i_data_echantillon => d_echantillon_temp,
+        o_data_temp_min => d_temp_min,
+        o_data_temp_max => d_temp_max
     );
       
    Synchronisation : Synchro_Horloges
@@ -227,6 +305,18 @@ begin
     
     o_ADC_CLK <= clk_5MHz;
     o_DAC_CLK <= clk_5MHz;
+    
+    process(d_echantillon_pret_strobe)
+    begin
+        reset_1min <= '0';
+        if(d_echantillon_pret_strobe = '1') then
+            compteur_1min <= compteur_1min + 1;
+        end if;
+        if(compteur_1min = 60) then
+            reset_1min <= '1';
+            compteur_1min <= 0;
+        end if;
+    end process;
     
     syncroV2 : process (clk_5MHz)
     begin
@@ -290,7 +380,14 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_echantillon => d_echantillon,
+        i_data_son => d_echantillon_son,
+        i_data_temp => d_echantillon_temp,
+        i_son_max => d_son_max,
+        i_son_min => d_son_min,
+        i_son_moy => d_son_moy,
+        i_temp_max => d_temp_max,
+        i_temp_min => d_temp_min,
+        i_temp_moy => d_temp_moy,
         i_sw_tri_i => i_sw,
         o_data_out => open,
         o_leds_tri_o => o_leds

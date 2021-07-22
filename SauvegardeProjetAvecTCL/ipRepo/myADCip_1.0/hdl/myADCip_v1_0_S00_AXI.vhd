@@ -16,7 +16,14 @@ entity myADCip_v1_0_S00_AXI is
 	);
 	port (
 		-- Users to add ports here
-        i_data_echantillon : in std_logic_vector(11 downto 0);
+        i_data_temp : in std_logic_vector(11 downto 0);
+        i_temp_moy  : in std_logic_vector(11 downto 0);
+        i_temp_min  : in std_logic_vector(11 downto 0);
+        i_temp_max  : in std_logic_vector(11 downto 0);
+        i_data_son  : in std_logic_vector(11 downto 0);
+        i_son_moy   : in std_logic_vector(11 downto 0);
+        i_son_min   : in std_logic_vector(11 downto 0);
+        i_son_max   : in std_logic_vector(11 downto 0);
         o_data_out : out std_logic_vector(31 downto 0);
 		-- User ports ends
 		-- Do not modify the ports beyond this line
@@ -354,14 +361,23 @@ begin
 	    loc_addr := axi_araddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	    case loc_addr is
 	      when b"00" =>
-	        reg_data_out(11 downto 0) <= i_data_echantillon;
-            reg_data_out(31 downto 12) <= (others => '0');
+	        reg_data_out(11 downto 0) <= i_data_temp;
+            reg_data_out(23 downto 12) <= i_temp_moy;
+            reg_data_out(31 downto 24) <= (others => '0');
 	      when b"01" =>
-	        reg_data_out <= slv_reg1;
+	        reg_data_out(11 downto 0) <= i_temp_min;
+            reg_data_out(23 downto 12) <= i_temp_max;
+            reg_data_out(31 downto 24) <= (others => '0');
 	      when b"10" =>
-	        reg_data_out <= slv_reg2;
+	        reg_data_out(11 downto 0) <= i_data_son;
+            reg_data_out(23 downto 12) <= i_son_moy;
+            reg_data_out(31 downto 24) <= (others => '0');
+	        --reg_data_out <= slv_reg2;
 	      when b"11" =>
-	        reg_data_out <= slv_reg3;
+	        reg_data_out(11 downto 0) <= i_son_min;
+            reg_data_out(23 downto 12) <= i_son_max;
+            reg_data_out(31 downto 24) <= (others => '0');
+	        --reg_data_out <= slv_reg3;
 	      when others =>
 	        reg_data_out  <= (others => '0');
 	    end case;
