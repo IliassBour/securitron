@@ -5,19 +5,23 @@
 #		source D:/ZYBO/Work-2020.2/Ateliers/Atelier2-Git/scripts/atelier2_vitisProj.tcl
 
 
-set origin_dir "."
+#set origin_dir "."
 
 # nom du projet
 set app_name http_server_test
 
 # spécifier le répertoire où placer le projet
-set workspace $origin_dir/../work/Vitis_workspace
+set workspace "C:/GitHub/securitron/SauvegardeProjetAvecTCL/work/Vitis_workspace"
+#$origin_dir/../work/Vitis_workspace
 
 # Paths pour les fichiers sources c/c++/h
-set sourcePath $origin_dir/../../vitisProj/http_server_test/src
+set sourcePath "C:/GitHub/securitron/SauvegardeProjetAvecTCL/vitisProj/http_server_test/src"
+#origin_dir/../../vitisProj/http_server_test/src
+
 
 # Path pour le fichier .xsa
-set xsa_file $origin_dir/../Atelier3_1_test_vitis/top.xsa
+set xsa_file "C:/GitHub/securitron/SauvegardeProjetAvecTCL/work/Atelier3_1_test_vitis/top.xsa"
+#$origin_dir/../Atelier3_1_test_vitis/top.xsa
 
 set platform_name  design_1_wrapper
 
