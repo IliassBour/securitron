@@ -46,7 +46,7 @@ architecture Behavioral of reg_dec_donnees is
      begin    
        if (i_reset = '1')  then
           q_shift_reg  <= (others =>'0');
-      elsif rising_edge(i_clk) then  
+      elsif falling_edge(i_clk) then  
                 if (i_en = '1') then
                    q_prev_data <= q_shift_reg(127 downto 120);
                    q_shift_reg(127 downto 0) <= q_shift_reg(119 downto 0) & i_data;
