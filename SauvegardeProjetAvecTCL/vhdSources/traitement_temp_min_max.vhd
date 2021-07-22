@@ -61,12 +61,31 @@ begin
      if(i_reset = '1') then
         q_temp_min <= x"7f"; -- 127
         q_temp_max <= x"d8"; -- -40
-     elsif rising_edge(i_clk) and i_strobe='1' and reset_wait='0' then
-        if((to_integer(signed(q_temp_min)) > to_integer(signed(i_data_echantillon(11 downto 4))))) then
-            q_temp_min <= i_data_echantillon(11 downto 4);
-        end if;
-        if(signed(q_temp_max) < signed(i_data_echantillon(11 downto 4))) then
-            q_temp_max <= i_data_echantillon(11 downto 4);
+     elsif rising_edge(i_clk) and i_strobe='1' and reset_wait='0' then      
+       if(i_data_echantillon(11) = '0') then
+            if(signed(i_data_echantillon(11 downto 4)) > -41) then
+                if(q_temp_min(7) = '0' and (unsigned(q_temp_min(7 downto 0)) > unsigned(i_data_echantillon(11 downto 4)))) then
+                    q_temp_min(7 downto 1) <= i_data_echantillon(10 downto 4) & "0";
+                end if;
+            end if;
+            
+            if(signed(i_data_echantillon(11 downto 4)) < 111) then
+                if(q_temp_max(7) = '1' or (unsigned(q_temp_max(7 downto 0)) < unsigned(i_data_echantillon(11 downto 4)))) then
+                    q_temp_max <= i_data_echantillon(11 downto 4);
+                end if;
+            end if;
+        else 
+            if(signed(i_data_echantillon(11 downto 4)) > -41) then
+                if(q_temp_min(7) = '0' or (unsigned(q_temp_min(7 downto 0)) > unsigned(i_data_echantillon(11 downto 4)))) then
+                    q_temp_min <= i_data_echantillon(11 downto 4);
+                end if;
+            end if;
+            
+            if(signed(i_data_echantillon(11 downto 4)) < 111) then
+                if(q_temp_max(7) = '1' and unsigned(q_temp_max(7 downto 0)) < unsigned(i_data_echantillon(11 downto 4))) then
+                    q_temp_max <= i_data_echantillon(11 downto 4);
+                end if;
+            end if;
         end if;
      end if;
     end process;
