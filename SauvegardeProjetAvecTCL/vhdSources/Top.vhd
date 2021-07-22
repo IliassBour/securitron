@@ -241,7 +241,7 @@ architecture Behavioral of Top is
     signal d_S_1Hz_minus_1 : std_logic;
 begin
     reset    <= i_btn(0);
-    d_reset <= reset or reset_1min;
+    d_reset <= reset;-- or reset_1min;
         
 --     mux_select_Entree_AD1 : process (i_btn(3), i_ADC_D0, i_ADC_D1)
 --     begin
@@ -409,10 +409,10 @@ begin
     port map(
         clk                     => clk_5MHz,
         i_ADC_echantillon       => d_echantillon_son,
-        i_ADC_echantillon_pret  =>d_echantillon_pret_strobe,
+        i_ADC_echantillon_pret  => d_echantillon_pret_strobe,
         o_compteur              => open,
-        o_echantillon_out       => d_son_min(7 downto 0),
-        o_echantillon_outMax    => d_son_max(7 downto 0)
+        o_echantillon_out       => d_son_min(11 downto 4),
+        o_echantillon_outMax    => d_son_max(11 downto 4)
     );
 
 end Behavioral;
