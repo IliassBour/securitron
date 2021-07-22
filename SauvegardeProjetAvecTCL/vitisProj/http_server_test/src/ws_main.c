@@ -34,7 +34,7 @@
 #include "lwip/inet.h"
 #include <stdbool.h>
 #include "sleep.h"
-//#include "PmodOLED.h"
+#include "PmodOLED.h"
 #if (LWIP_DHCP == 1)
 #include "lwip/dhcp.h"
 #endif
@@ -208,51 +208,50 @@ int main_thread()
 	return 0;
 }
 
-//int oled_thread(bool* minTemp)
-//{
-//	xil_printf("-----Starting oled thread ------\r\n");
-//	PmodOLED oledDevice;
-//
-//	OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR, XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, 0, 0);  // initialiser le Pmod Oled
-//
-//
-//
-//	OLED_SetCharUpdate(&oledDevice, 0);
-//
-//	while (1)
-//	{
-//		//xil_printf("-----oled loop ------\r\n");
-//		OLED_ClearBuffer(&oledDevice);
-//		OLED_SetCursor(&oledDevice, 0, 0);
-//		if (*minTemp)
-//			OLED_PutString(&oledDevice, "TEST VRAI");
-//		else
-//			OLED_PutString(&oledDevice, "TEST FAUX");
-//		OLED_SetCursor(&oledDevice, 0, 1);
-//		OLED_PutString(&oledDevice, "C mieu que vitis");
-//
-//		OLED_Update(&oledDevice);
-//
-//		*minTemp = !*minTemp;
-//
-//		sleep(1);
-//	}
-//
-//
-//
-//	return 0;
-//}
+int oled_thread(bool* minTemp)
+{
+	xil_printf("-----Starting oled thread ------\r\n");
+	PmodOLED oledDevice;
+
+	OLED_Begin(&oledDevice, XPAR_PMODOLED_0_AXI_LITE_GPIO_BASEADDR, XPAR_PMODOLED_0_AXI_LITE_SPI_BASEADDR, 0, 0);  // initialiser le Pmod Oled
+
+
+
+	OLED_SetCharUpdate(&oledDevice, 0);
+
+	while (1)
+	{
+		//xil_printf("-----oled loop ------\r\n");
+		OLED_ClearBuffer(&oledDevice);
+		OLED_SetCursor(&oledDevice, 0, 0);
+		if (*minTemp)
+			OLED_PutString(&oledDevice, "TEST VRAI");
+		else
+			OLED_PutString(&oledDevice, "TEST FAUX");
+		OLED_SetCursor(&oledDevice, 0, 1);
+
+		OLED_Update(&oledDevice);
+
+		*minTemp = !*minTemp;
+
+		sleep(1);
+	}
+
+
+
+	return 0;
+}
 
 
 int main()
 {
-	//bool minTemp = false;
+	bool minTemp = false;
 
 	sys_thread_new("main_thread", (void(*)(void*))main_thread, 0,
 			MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
 
-//	sys_thread_new("oled_thread", (void(*)(void*))oled_thread, &minTemp,
-//				MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
+	sys_thread_new("oled_thread", (void(*)(void*))oled_thread, &minTemp,
+				MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
 
 
 	vTaskStartScheduler();
