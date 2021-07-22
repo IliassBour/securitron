@@ -224,10 +224,24 @@ int oled_thread(bool* minTemp)
 		//xil_printf("-----oled loop ------\r\n");
 		OLED_ClearBuffer(&oledDevice);
 		OLED_SetCursor(&oledDevice, 0, 0);
+		char buff_indication[40] ;
+		char buff_value[10];
 		if (*minTemp)
-			OLED_PutString(&oledDevice, "TEST VRAI");
+		{
+
+			strcpy(buff_indication, "Temp min: ");
+			sprintf(buff_value, "%d C", getMinTemp());
+
+		}
 		else
-			OLED_PutString(&oledDevice, "TEST FAUX");
+		{
+			strcpy(buff_indication, "Temp max: ");
+			sprintf(buff_value, "%d C", getMaxTemp());
+		}
+		strcat(buff_indication, buff_value);
+
+		OLED_PutString(&oledDevice, buff_indication);
+
 		OLED_SetCursor(&oledDevice, 0, 1);
 
 		OLED_Update(&oledDevice);
