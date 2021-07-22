@@ -29,7 +29,8 @@ entity reg_dec_donnees is
     i_reset     : in std_logic;      -- reinitialisation
     i_en        : in std_logic;      -- activation decalage
     i_data      : in std_logic_vector(7 downto 0);     -- entree serie
-    o_data      : out  std_logic_vector(127 downto 0)   -- sortie parallele
+    o_data      : out  std_logic_vector(127 downto 0);   -- sortie parallele
+    o_prev_data : out std_logic_vector(7 downto 0)
 );
 end reg_dec_donnees;
 
@@ -37,6 +38,7 @@ architecture Behavioral of reg_dec_donnees is
 
   --
     signal   q_shift_reg   : std_logic_vector(127 downto 0) := (others =>'0');   -- registre
+    signal   q_prev_data   : std_logic_vector(7 downto 0) := x"00";
     
   begin 
   -- registre a décalage,  MSB arrive premier, entre par la droite, decalage a gauche  
@@ -46,11 +48,13 @@ architecture Behavioral of reg_dec_donnees is
           q_shift_reg  <= (others =>'0');
       elsif rising_edge(i_clk) then  
                 if (i_en = '1') then
+                   q_prev_data <= q_shift_reg(127 downto 120);
                    q_shift_reg(127 downto 0) <= q_shift_reg(119 downto 0) & i_data;
                 end if;
        end if;
      end process;
  
      o_data   <=  q_shift_reg;
-
+     o_prev_data <= q_prev_data;
+     
 end Behavioral;

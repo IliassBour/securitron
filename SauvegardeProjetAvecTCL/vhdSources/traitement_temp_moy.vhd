@@ -49,15 +49,18 @@ Port (
     i_reset     : in std_logic;      -- reinitialisation
     i_en        : in std_logic;      -- activation decalage
     i_data      : in std_logic_vector(7 downto 0);     -- entree serie
-    o_data      : out  std_logic_vector(127 downto 0)   -- sortie parallele
+    o_data      : out  std_logic_vector(127 downto 0);   -- sortie parallele
+    o_data_prev : out std_logic_vector(7 downto 0)
 );
 end component;
 
+type tableau is array (integer range 0 to 7) of std_logic_vector(7 downto 0);
+constant mem_temp : tableau := (others => x"00");
+
     signal s_donnees_registre : std_logic_vector(127 downto 0) := (others => '0');
-    signal s_somme            : std_logic_vector(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_somme            : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
     signal s_moyenne          : std_logic_vector(7 downto 0) := (others => '0');
-    signal s_mid              : std_logic_vector(11 downto 0) := (others => '0');
-    signal j,n                : integer := 0;
+    signal s_data_prev        : std_logic_vector(7 downto 0) := x"00";
 
 begin
     
@@ -67,33 +70,39 @@ begin
         i_reset => i_reset,
         i_en => i_strobe,
         i_data => i_data_echantillon(11 downto 4),
-        o_data => s_donnees_registre
+        o_data => s_donnees_registre,
+        o_data_prev => s_data_prev
     );
 
-    process(i_clk, i_strobe, i_reset, s_donnees_registre)
+    process(i_reset, i_strobe)
     begin
-        s_somme <= std_logic_vector(signed("0000" & s_donnees_registre(127 downto 120))
-               + signed("0000" & s_donnees_registre(119 downto 112))
-               + signed("0000" & s_donnees_registre(111 downto 104))
-               + signed("0000" & s_donnees_registre(103 downto 96))
-               + signed("0000" & s_donnees_registre(95 downto 88))
-               + signed("0000" & s_donnees_registre(87 downto 80))
-               + signed("0000" & s_donnees_registre(79 downto 72))
-               + signed("0000" & s_donnees_registre(71 downto 64))
-               + signed("0000" & s_donnees_registre(63 downto 56))
-               + signed("0000" & s_donnees_registre(55 downto 48))
-               + signed("0000" & s_donnees_registre(47 downto 40))
-               + signed("0000" & s_donnees_registre(39 downto 32))
-               + signed("0000" & s_donnees_registre(31 downto 24))
-               + signed("0000" & s_donnees_registre(23 downto 16))
-               + signed("0000" & s_donnees_registre(15 downto 8))
-               + signed("0000" & s_donnees_registre(7 downto 0))
-               );
-               
+        s_somme <= s_somme + signed(i_data_echantillon(11 downto 4)) - signed(s_data_prev);
+        
+        
+--        s_somme <= std_logic_vector(TO_SIGNED(
+--               ( TO_INTEGER(signed(s_donnees_registre(127 downto 120)))
+--               + TO_INTEGER(signed(s_donnees_registre(119 downto 112)))
+--               + TO_INTEGER(signed(s_donnees_registre(111 downto 104)))
+--               + TO_INTEGER(signed(s_donnees_registre(103 downto 96)))
+--               + TO_INTEGER(signed(s_donnees_registre(95 downto 88)))
+--               + TO_INTEGER(signed(s_donnees_registre(87 downto 80)))
+--               + TO_INTEGER(signed(s_donnees_registre(79 downto 72)))
+--               + TO_INTEGER(signed(s_donnees_registre(71 downto 64)))
+--               + TO_INTEGER(signed(s_donnees_registre(63 downto 56)))
+--               + TO_INTEGER(signed(s_donnees_registre(55 downto 48)))
+--               + TO_INTEGER(signed(s_donnees_registre(47 downto 40)))
+--               + TO_INTEGER(signed(s_donnees_registre(39 downto 32)))
+--               + TO_INTEGER(signed(s_donnees_registre(31 downto 24)))
+--               + TO_INTEGER(signed(s_donnees_registre(23 downto 16)))
+--               + TO_INTEGER(signed(s_donnees_registre(15 downto 8)))
+--               + TO_INTEGER(signed(s_donnees_registre(7 downto 0)))
+--               ), s_somme'length));
         --équivalent à shift_right de 4 => diviser par 16   *Prend la donnée floor de la division
-        s_moyenne <= s_somme(11 downto 4); 
+        if(i_reset='1' or i_strobe='1') then
+            s_moyenne <= std_logic_vector(s_somme(11 downto 4)); 
+        end if;
     end process;
            
-    o_data_temp_moy <= "0000" & s_moyenne;
+    o_data_temp_moy <= s_donnees_registre(7 downto 0) & x"0";--s_moyenne & x"0";
 
 end Behavioral;

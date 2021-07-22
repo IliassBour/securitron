@@ -214,7 +214,7 @@ architecture Behavioral of Top is
     signal d_temp_max                   : std_logic_vector (11 downto 0);
 
     signal compteur_en               : std_logic := '0';  -- cadence echantillonnage AD1
-    signal compteur_reset                        : std_logic;
+    signal compteur_reset            : std_logic;
     signal compteur_val              : integer := 0;
     signal strobe_ADC                : std_logic := '0';
     

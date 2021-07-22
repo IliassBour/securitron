@@ -70,29 +70,29 @@ begin
 
     process(i_reset, s_donnees_registre)
     begin
-    
-    s_somme <= std_logic_vector(signed("0000" & s_donnees_registre(127 downto 120))
-               + signed("0000" & s_donnees_registre(119 downto 112))
-               + signed("0000" & s_donnees_registre(111 downto 104))
-               + signed("0000" & s_donnees_registre(103 downto 96))
-               + signed("0000" & s_donnees_registre(95 downto 88))
-               + signed("0000" & s_donnees_registre(87 downto 80))
-               + signed("0000" & s_donnees_registre(79 downto 72))
-               + signed("0000" & s_donnees_registre(71 downto 64))
-               + signed("0000" & s_donnees_registre(63 downto 56))
-               + signed("0000" & s_donnees_registre(55 downto 48))
-               + signed("0000" & s_donnees_registre(47 downto 40))
-               + signed("0000" & s_donnees_registre(39 downto 32))
-               + signed("0000" & s_donnees_registre(31 downto 24))
-               + signed("0000" & s_donnees_registre(23 downto 16))
-               + signed("0000" & s_donnees_registre(15 downto 8))
-               + signed("0000" & s_donnees_registre(7 downto 0))
-               );
+        s_somme <= std_logic_vector(TO_SIGNED(
+               ( TO_INTEGER(signed(s_donnees_registre(127 downto 120)))
+               + TO_INTEGER(signed(s_donnees_registre(119 downto 112)))
+               + TO_INTEGER(signed(s_donnees_registre(111 downto 104)))
+               + TO_INTEGER(signed(s_donnees_registre(103 downto 96)))
+               + TO_INTEGER(signed(s_donnees_registre(95 downto 88)))
+               + TO_INTEGER(signed(s_donnees_registre(87 downto 80)))
+               + TO_INTEGER(signed(s_donnees_registre(79 downto 72)))
+               + TO_INTEGER(signed(s_donnees_registre(71 downto 64)))
+               + TO_INTEGER(signed(s_donnees_registre(63 downto 56)))
+               + TO_INTEGER(signed(s_donnees_registre(55 downto 48)))
+               + TO_INTEGER(signed(s_donnees_registre(47 downto 40)))
+               + TO_INTEGER(signed(s_donnees_registre(39 downto 32)))
+               + TO_INTEGER(signed(s_donnees_registre(31 downto 24)))
+               + TO_INTEGER(signed(s_donnees_registre(23 downto 16)))
+               + TO_INTEGER(signed(s_donnees_registre(15 downto 8)))
+               + TO_INTEGER(signed(s_donnees_registre(7 downto 0)))
+               ), s_somme'length));
                
         --équivalent à shift_right de 4 => diviser par 16   *Prend la donnée floor de la division
         s_moyenne <= s_somme(11 downto 4); 
     end process;
            
-    o_data_son_moy <= "0000" & s_moyenne ;
+    o_data_son_moy <= s_moyenne & x"0" ;
 
 end Behavioral;
