@@ -141,43 +141,6 @@ int do_http_post(int sd, char *req, int rlen)
 	return 0;
 }
 
-int getCurrentTemp()
-{
-	return (int8_t) AD1_GetSampleRaw(0xC, true);
-}
-
-int getMaxTemp()
-{
-	return (int8_t) AD1_GetSampleRaw(0x0, false);;
-}
-
-int getMinTemp()
-{
-	return (int8_t) AD1_GetSampleRaw(0x0, true);
-}
-int getAvgTemp()
-{
-	return (int8_t) AD1_GetSampleRaw(0x8, true);
-}
-
-int getCurrentSound()
-{
-	return AD1_GetSampleRaw(0xC, false);
-}
-
-int getMaxSound()
-{
-	return AD1_GetSampleRaw(0x4, false);
-}
-int getMinSound()
-{
-	return AD1_GetSampleRaw(0x4, true);
-}
-int getAvgSound()
-{
-	return AD1_GetSampleRaw(0x8, false);
-}
-
 /* respond for a file GET request */
 int do_http_get(int sd, char *req, int rlen)
 {
@@ -223,7 +186,6 @@ int do_http_get(int sd, char *req, int rlen)
 					getMinSound(),
 					getAvgSound());
 
-			xil_printf("post\r\n");
         
     	}/* else if (s4i_is_api_temp_max(req)) {
     		xil_printf("!!! HTTP GET: api/temperature/max\r\n");

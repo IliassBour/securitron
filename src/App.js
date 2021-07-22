@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       handleRequest();
-    }, 1000);
+    }, 250);
     return () => clearInterval(interval);
   }, []);
 

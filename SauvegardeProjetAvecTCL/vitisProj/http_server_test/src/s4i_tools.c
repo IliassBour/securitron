@@ -118,26 +118,62 @@ unsigned int s4i_get_sws_state()
 
 u8 AD1_GetSampleRaw(u8 address, bool first)
 {
-	if (address < 4)
+	if (address % 4 == 0 && address <= 0xc)
 	{
 		u32 rawData =  MYADCIP_mReadReg(MY_AD1_IP_BASEADDRESS, address);
 
-		if (address == 0x0)
-		{
-			xil_printf("registre: %x\r\n", rawData);
-		}
+
 
 		if (first)
 		{
+			xil_printf("address: 0x%x\traw data: 0x%08x\r\n", address, rawData);
+
 			rawData &= 0x00000FF0;
 			rawData >>= 4;
 		} else {
-			rawData &= 0x0FF00000;
-			rawData >>= 20;
+			rawData &= 0x00FF0000;
+			rawData >>= 16;
 		}
 
 		return (u8) rawData;
 	}
 	return -1;
+}
+
+int getCurrentTemp()
+{
+	return (int8_t) AD1_GetSampleRaw(0x0, true);
+}
+
+int getMaxTemp()
+{
+	return (int8_t) AD1_GetSampleRaw(0x4, false);;
+}
+
+int getMinTemp()
+{
+	return (int8_t) AD1_GetSampleRaw(0x4, true);
+}
+int getAvgTemp()
+{
+	return (int8_t) AD1_GetSampleRaw(0x0, false);
+}
+
+int getCurrentSound()
+{
+	return AD1_GetSampleRaw(0x8, true);
+}
+
+int getMaxSound()
+{
+	return AD1_GetSampleRaw(0xc, false);
+}
+int getMinSound()
+{
+	return AD1_GetSampleRaw(0xc, true);
+}
+int getAvgSound()
+{
+	return AD1_GetSampleRaw(0x8, false);
 }
 

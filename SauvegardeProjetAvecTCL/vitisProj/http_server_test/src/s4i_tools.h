@@ -31,4 +31,14 @@ unsigned int 	s4i_get_sws_state();
 
 u8 AD1_GetSampleRaw(u8 address, bool first);
 
+int getCurrentTemp();
+int getMaxTemp();
+int getMinTemp();
+int getAvgTemp();
+int getCurrentSound();
+int getMaxSound();
+int getMinSound();
+int getAvgSound();
+
+
 #endif /* SRC_S4I_TOOLS_H_ */

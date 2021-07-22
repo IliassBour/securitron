@@ -194,6 +194,18 @@ architecture Behavioral of Top is
       );
     end component;
     
+    component Pblaze_uCtrler
+    port (
+    clk                     : in std_logic;
+    i_ADC_echantillon       : in std_logic_vector (11 downto 0); 
+    i_ADC_echantillon_pret  : in std_logic;
+    o_compteur              : out std_logic_vector(3 downto 0);
+    o_echantillon_out       : out std_logic_vector(7 downto 0);
+    o_echantillon_outMax    : out std_logic_vector(7 downto 0)
+   
+  );
+  end component;
+    
     --signaux 
     
     signal clk_5MHz                     : std_logic;
@@ -391,6 +403,16 @@ begin
         i_sw_tri_i => i_sw,
         o_data_out => open,
         o_leds_tri_o => o_leds
+    );
+
+    PblazeMin: Pblaze_uCtrler
+    port map(
+        clk                     => clk_5MHz,
+        i_ADC_echantillon       => d_echantillon_son,
+        i_ADC_echantillon_pret  =>d_echantillon_pret_strobe,
+        o_compteur              => open,
+        o_echantillon_out       => d_son_min(7 downto 0),
+        o_echantillon_outMax    => d_son_max(7 downto 0)
     );
 
 end Behavioral;

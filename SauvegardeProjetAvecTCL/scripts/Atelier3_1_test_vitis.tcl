@@ -66,6 +66,9 @@ proc checkRequiredFiles { origin_dir} {
    "$origin_dir/../vhdSources/traitement_son_moy.vhd" \
    "$origin_dir/../vhdSources/traitement_temp_min_max.vhd" \
    "$origin_dir/../vhdSources/traitement_temp_moy.vhd" \
+   "$origin_dir/../vhdSources/Pblaze_uCtrler.vhd" \
+   "$origin_dir/../vhdSources/myProgramMin.vhd" \
+   "$origin_dir/../vhdSources/kcpsm6.vhd" \
   ]
   # INSERT NEW FILES HERE ^^^
 
@@ -231,6 +234,9 @@ set files [list \
  [file normalize "${origin_dir}/../vhdSources/traitement_son_moy.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/traitement_temp_min_max.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/traitement_temp_moy.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/Pblaze_uCtrler.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/myProgramMin.vhd"]\
+ [file normalize "${origin_dir}/../vhdSources/kcpsm6.vhd"]\
 ]
 # INSERT NEW FILES HERE
 
@@ -242,6 +248,21 @@ add_files -norecurse -fileset $obj $files
 
 # Set 'sources_1' fileset file properties for local files
 # INSERT NEW FILES HERE
+set file "$origin_dir/../vhdSources/kcpsm6.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/Pblaze_uCtrler.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
+set file "$origin_dir/../vhdSources/myProgramMin.vhd"
+set file [file normalize $file]
+set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
+set_property -name "file_type" -value "VHDL" -objects $file_obj
+
 set file "$origin_dir/../vhdSources/AD7476_mef.vhd"
 set file [file normalize $file]
 set file_obj [get_files -of_objects [get_filesets sources_1] [list "*$file"]]
