@@ -30,7 +30,7 @@ entity reg_dec_donnees is
     i_en        : in std_logic;      -- activation decalage
     i_data      : in std_logic_vector(7 downto 0);     -- entree serie
     o_data      : out  std_logic_vector(127 downto 0);   -- sortie parallele
-    o_prev_data : out std_logic_vector(7 downto 0)
+    o_data_prev : out std_logic_vector(7 downto 0)
 );
 end reg_dec_donnees;
 
@@ -55,6 +55,6 @@ architecture Behavioral of reg_dec_donnees is
      end process;
  
      o_data   <=  q_shift_reg;
-     o_prev_data <= q_prev_data;
+     o_data_prev <= q_prev_data;
      
 end Behavioral;

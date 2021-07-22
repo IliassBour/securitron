@@ -58,7 +58,7 @@ type tableau is array (integer range 0 to 7) of std_logic_vector(7 downto 0);
 constant mem_temp : tableau := (others => x"00");
 
     signal s_donnees_registre : std_logic_vector(127 downto 0) := (others => '0');
-    signal s_somme            : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_somme, s_somme_prev : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
     signal s_moyenne          : std_logic_vector(7 downto 0) := (others => '0');
     signal s_data_prev        : std_logic_vector(7 downto 0) := x"00";
 
@@ -76,9 +76,9 @@ begin
 
     process(i_reset, i_strobe)
     begin
-        s_somme <= s_somme + signed(i_data_echantillon(11 downto 4)) - signed(s_data_prev);
-        
-        
+          s_somme_prev <= s_somme;
+          s_somme <= s_somme_prev + RESIZE(signed(i_data_echantillon(11 downto 4)), 12) - RESIZE(signed(s_data_prev), 12);
+          s_moyenne <= std_logic_vector(s_somme(11 downto 4)); 
 --        s_somme <= std_logic_vector(TO_SIGNED(
 --               ( TO_INTEGER(signed(s_donnees_registre(127 downto 120)))
 --               + TO_INTEGER(signed(s_donnees_registre(119 downto 112)))
@@ -98,11 +98,11 @@ begin
 --               + TO_INTEGER(signed(s_donnees_registre(7 downto 0)))
 --               ), s_somme'length));
         --équivalent à shift_right de 4 => diviser par 16   *Prend la donnée floor de la division
-        if(i_reset='1' or i_strobe='1') then
-            s_moyenne <= std_logic_vector(s_somme(11 downto 4)); 
-        end if;
+--        if(i_reset='1' or i_strobe='1') then
+           
+--        end if;
     end process;
            
-    o_data_temp_moy <= s_donnees_registre(7 downto 0) & x"0";--s_moyenne & x"0";
+    o_data_temp_moy <= s_moyenne & x"0";--s_donnees_registre(7 downto 0) & x"0";--
 
 end Behavioral;
