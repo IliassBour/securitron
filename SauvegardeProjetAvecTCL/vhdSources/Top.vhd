@@ -172,14 +172,14 @@ architecture Behavioral of Top is
         FIXED_IO_ps_clk : inout STD_LOGIC;
         FIXED_IO_ps_porb : inout STD_LOGIC;
         FIXED_IO_ps_srstb : inout STD_LOGIC;
-        Pmod_8LD_pin10_io : inout STD_LOGIC;
-        Pmod_8LD_pin1_io : inout STD_LOGIC;
-        Pmod_8LD_pin2_io : inout STD_LOGIC;
-        Pmod_8LD_pin3_io : inout STD_LOGIC;
-        Pmod_8LD_pin4_io : inout STD_LOGIC;
-        Pmod_8LD_pin7_io : inout STD_LOGIC;
-        Pmod_8LD_pin8_io : inout STD_LOGIC;
-        Pmod_8LD_pin9_io : inout STD_LOGIC;
+        Pmod_OLED_pin10_io : inout STD_LOGIC;
+        Pmod_OLED_pin1_io : inout STD_LOGIC;
+        Pmod_OLED_pin2_io : inout STD_LOGIC;
+        Pmod_OLED_pin3_io : inout STD_LOGIC;
+        Pmod_OLED_pin4_io : inout STD_LOGIC;
+        Pmod_OLED_pin7_io : inout STD_LOGIC;
+        Pmod_OLED_pin8_io : inout STD_LOGIC;
+        Pmod_OLED_pin9_io : inout STD_LOGIC;
         i_data_son : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_data_temp : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_son_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
@@ -372,14 +372,14 @@ begin
         FIXED_IO_ps_clk => FIXED_IO_ps_clk,
         FIXED_IO_ps_porb => FIXED_IO_ps_porb,
         FIXED_IO_ps_srstb => FIXED_IO_ps_srstb,
-        Pmod_8LD_pin1_io => Pmod_8LD(0),
-        Pmod_8LD_pin2_io => Pmod_8LD(1),
-        Pmod_8LD_pin3_io => Pmod_8LD(2),
-        Pmod_8LD_pin4_io => Pmod_8LD(3),
-        Pmod_8LD_pin7_io => Pmod_8LD(4),
-        Pmod_8LD_pin8_io => Pmod_8LD(5),
-        Pmod_8LD_pin9_io => Pmod_8LD(6),
-        Pmod_8LD_pin10_io => Pmod_8LD(7),
+        Pmod_OLED_pin1_io => Pmod_OLED(0),
+        Pmod_OLED_pin2_io => Pmod_OLED(1),
+        Pmod_OLED_pin3_io => Pmod_OLED(2),
+        Pmod_OLED_pin4_io => Pmod_OLED(3),
+        Pmod_OLED_pin7_io => Pmod_OLED(4),
+        Pmod_OLED_pin8_io => Pmod_OLED(5),
+        Pmod_OLED_pin9_io => Pmod_OLED(6),
+        Pmod_OLED_pin10_io => Pmod_OLED(7),
         i_data_son => d_echantillon_son,
         i_data_temp => d_echantillon_temp,
         i_son_max => d_son_max,
