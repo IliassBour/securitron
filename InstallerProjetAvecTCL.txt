@@ -1,7 +1,8 @@
 Consignes pour créer le projet sur vivado LA PREMIÈRE FOIS SEULEMENT
 (après le projet est dans ../securitron/SauvegardeProjetAvecTCL/work):
 
-1) Lancer Vivado
-2) Clicker sur la commande TCL en bas à gauche de Vivado
-3) Aller dans le dossier (commande) => cd pathFromGit/securitron/SauvegardeProjetAvecTCL/scripts
-4) Générer le projet avec TCL (commande) => source ./Atelier3_1_test_vitis.tcl
+1) Re-downloader la librairie vivado-librairy-2020-1 (je crois Atelier 1) dans pathFromGit/securitron/SauvegardeProjetAvecTCL/
+2) Lancer Vivado
+3) Clicker sur la commande TCL en bas à gauche de Vivado
+4) Aller dans le dossier (commande) => cd pathFromGit/securitron/SauvegardeProjetAvecTCL/scripts
+5) Générer le projet avec TCL (commande) => source ./Atelier3_1_test_vitis.tcl
