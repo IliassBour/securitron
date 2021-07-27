@@ -37,7 +37,12 @@ Port (
     i_strobe                      : in    std_logic;
     i_reset                       : in    std_logic;
     i_data_echantillon            : in    std_logic_vector(11 downto 0);
-    o_data_temp_moy               : out   std_logic_vector(11 downto 0)
+    o_data_temp_moy               : out   std_logic_vector(11 downto 0);
+    --Test
+    o_data_prev : out std_logic_vector(11 downto 0);  -- dernière donnée du registre
+    o_data : out std_logic_vector(11 downto 0);
+    o_data_resize : out std_logic_vector(11 downto 0);
+    o_somme : out std_logic_vector(11 downto 0)
 );
 end traitement_temp_moy;
 
@@ -55,11 +60,11 @@ Port (
 end component;
 
     signal s_donnees_registre      : std_logic_vector(127 downto 0) := (others => '0');
-    signal s_somme, s_somme_copy   : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
-    signal s_data_echantillon_copy : std_logic_vector(7 downto 0) := (others => '0');
+    signal s_somme, s_somme_copy, s_somme_prev   : unsigned(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_data_echantillon_copy : unsigned(11 downto 0) := (others => '0');
     signal s_moyenne               : std_logic_vector(7 downto 0) := (others => '0');
     signal s_data_prev             : std_logic_vector(7 downto 0) := x"00";
-
+    signal compteur                : integer := 0;
 begin
     
     registre : reg_dec_donnees
@@ -72,16 +77,50 @@ begin
         o_data_prev => s_data_prev
     );  
     
-    process(i_reset, i_strobe, i_clk)
+--    process(i_strobe, i_clk, i_reset)
+--    begin
+--        if(i_strobe = '1' and compteur = 0) then
+--            compteur <= 1;
+--        elsif(rising_edge(i_clk)) then
+--            if(compteur < 2 and compteur > 0) then
+--                compteur <= compteur + 1;
+--            else
+--                compteur <= 0;
+--            end if;
+--        end if;
+--    end process;
+    
+    process(i_reset, i_clk, i_strobe)
     begin
-        if falling_edge(i_strobe) then
-            s_somme_copy <= s_somme;
-            s_data_echantillon_copy <= i_data_echantillon(11 downto 4);
+        if(i_reset = '1') then
+            s_somme <= x"000";
+            s_somme_prev <= x"000";
+            s_somme_copy <= x"000";
+            s_data_echantillon_copy <= x"000";
+        elsif rising_edge(i_clk) then 
+            if (i_strobe = '1') then
+                s_data_echantillon_copy <= RESIZE(unsigned(i_data_echantillon(11 downto 4) & '0'), 12);
+                s_somme_prev <= s_somme;  
+                o_somme <= std_logic_vector(s_somme_prev);  
+                compteur <= 1;
+            end if;
+            
+            if(compteur = 1) then
+                 s_somme_copy <= s_somme_prev + s_data_echantillon_copy; 
+                 o_data_resize <= std_logic_vector(s_data_echantillon_copy);
+                 o_data <= std_logic_vector(s_somme_copy);
+                 o_data_prev <= std_logic_vector(s_somme_prev);
+                 compteur <= 2;         
+            elsif compteur = 2 then
+                 s_somme <= s_somme_copy - RESIZE(unsigned(s_data_prev), 12);
+                 compteur <= 3;
+            elsif compteur = 3 then
+                s_moyenne <= std_logic_vector(s_somme(11 downto 4));
+                compteur <= 0;
+            end if;
         end if;
-        s_somme <= s_somme_copy + RESIZE(signed(s_data_echantillon_copy), 12) - RESIZE(signed(s_data_prev), 12);          
-        s_moyenne <= std_logic_vector(s_somme(11 downto 4));
     end process;
-           
+    
     o_data_temp_moy <= s_moyenne & x"0";--s_donnees_registre(7 downto 0) & x"0";--
 
 end Behavioral;

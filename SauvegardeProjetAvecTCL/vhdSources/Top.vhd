@@ -105,7 +105,11 @@ architecture Behavioral of Top is
         i_strobe                      : in    std_logic;
         i_reset                       : in    std_logic;
         i_data_echantillon            : in    std_logic_vector(11 downto 0);
-        o_data_temp_moy               : out   std_logic_vector(11 downto 0)
+        o_data_temp_moy               : out   std_logic_vector(11 downto 0);
+        o_data_prev : out std_logic_vector(11 downto 0);  -- dernière donnée du registre
+        o_data : out std_logic_vector(11 downto 0);
+        o_data_resize : out std_logic_vector(11 downto 0);
+        o_somme : out std_logic_vector(11 downto 0)
       );
     end component;
     
@@ -227,9 +231,43 @@ architecture Behavioral of Top is
     signal lecture : std_logic := '0';
     signal strobe_DAC : std_logic;
     signal d_S_1Hz_minus_1 : std_logic;
+    
+    signal temp_prev1, temp_prev2, temp_current, s_somme: std_logic_vector (11 downto 0) := x"000";
+    signal data_trait :std_logic_vector (11 downto 0) := x"000";
+    
 begin
     reset    <= i_btn(0);
     d_reset <= reset or reset_1min;
+    
+    process(strobe_1Hz)
+    begin
+         temp_current <= d_echantillon_temp;
+    end process;
+--    process(d_echantillon_temp)
+--    begin
+--        temp_current <= d_echantillon_temp;
+        
+--        if(temp_prev1(11 downto 5) = d_echantillon_temp(10 downto 4)) then
+--            temp_current <= temp_prev1;
+--        else
+--            temp_prev1 <= d_echantillon_temp;
+--        end if;
+----        if(d_echantillon_pret_strobe = '1') then
+----            temp_prev2 <= x"000";
+----            temp_prev1 <= x"000";
+----        end if;
+        
+----        if(temp_prev1 = x"000" and temp_prev2 = x"000") then
+----             temp_prev1 <= d_echantillon_temp;
+----        elsif(d_echantillon_temp = temp_prev1 or d_echantillon_temp = temp_prev2) then
+----            temp_prev2 <= temp_prev1;
+----            temp_prev1 <= d_echantillon_temp;
+----        else
+----            temp_current <= temp_prev1;
+----            temp_prev2 <= temp_prev1;
+----            temp_prev1 <= d_echantillon_temp;
+----        end if;
+--    end process;
         
 --     mux_select_Entree_AD1 : process (i_btn(3), i_ADC_D0, i_ADC_D1)
 --     begin
@@ -279,8 +317,12 @@ begin
         i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
-        i_data_echantillon => d_echantillon_temp,
-        o_data_temp_moy => d_temp_moy
+        i_data_echantillon => temp_current,
+        o_data_temp_moy => d_temp_moy,
+        o_data_prev => temp_prev1,
+        o_data => data_trait,
+        o_data_resize => temp_prev2,
+        o_somme => s_somme
     );
       
     Temp_min_max : traitement_temp_min_max
@@ -288,7 +330,7 @@ begin
         i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => d_reset,
-        i_data_echantillon => d_echantillon_temp,
+        i_data_echantillon => temp_current,
         o_data_temp_min => d_temp_min,
         o_data_temp_max => d_temp_max
     );
@@ -380,13 +422,13 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_son => d_echantillon_son,
-        i_data_temp => d_echantillon_temp,
+        i_data_son => data_trait, -- copy
+        i_data_temp => temp_current,
         i_son_max => d_son_max,
-        i_son_min => d_son_min,
-        i_son_moy => d_son_moy,
-        i_temp_max => d_temp_max,
-        i_temp_min => d_temp_min,
+        i_son_min => data_trait,
+        i_son_moy => s_somme,
+        i_temp_max => temp_prev2, -- resize
+        i_temp_min => temp_prev1, -- prev
         i_temp_moy => d_temp_moy,
         i_sw_tri_i => i_sw,
         o_data_out => open,
