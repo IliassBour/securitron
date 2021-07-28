@@ -12,8 +12,6 @@ import i18n from '../../translation.json'
 export const TableInfo = ({ data }) => {
   const [translationValue, setTranslationValue] = useState('fr');
 
-  console.log(data);
-
   const title = i18n.Translation[`${data.name}`][`${translationValue}`];
   const unit = i18n.Units[`${data.name}`][`${translationValue}`];
   
@@ -24,7 +22,7 @@ export const TableInfo = ({ data }) => {
       </Typography>
       <Table size="small" aria-label="a dense table">
         <TableBody>
-        <TableRow key={'max'}>
+        <TableRow key={'current'}>
             <TableCell align="center" colSpan={2} style={{fontSize: "50px"}} >{data.current !== null ? `${data.current} ${unit}` : 'Aucune donnée'}</TableCell>
           </TableRow>
           <TableRow key={'max'}>
@@ -44,6 +42,12 @@ export const TableInfo = ({ data }) => {
               Moyenne
             </TableCell>
             <TableCell align="right">{data.avg !== null ? `${data.avg} ${unit}` : 'Aucune donnée'}</TableCell>
+          </TableRow>
+          <TableRow key={'archive'}>
+            <TableCell component="th" scope="row">
+              Dernières valeurs
+            </TableCell>
+            <TableCell align="right">{data.archive.slice(0,5).join(` ${unit}, `) + ` ${unit}`}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

@@ -143,7 +143,7 @@ void network_thread(void *p)
 #endif
 }
 
-int main_thread()
+int main_thread(webServerShare *data)
 {
 
 #if (LWIP_DHCP == 1)
@@ -202,13 +202,40 @@ int main_thread()
 	s4i_init_hw();
 
 	/* start the application */
-	start_application();
+	start_application(data);
 
 	vTaskDelete(NULL);
 	return 0;
 }
 
-int oled_thread(bool* minTemp)
+int archive_thread(archiveData* data)
+{
+	xil_printf("-----Starting archive thread ------\r\n");
+
+	xil_printf("-----Clearing archive ------\r\n");
+
+	for (int i = 0; i < 60; i++)
+	{
+		data->sound[i] = 0;
+		data->temp[i] = 0;
+	}
+
+	while (1)
+	{
+		for (int i = 59; i>0; i--)
+		{
+			data->sound[i] = data->sound[i - 1];
+			data->temp[i] = data->temp[i - 1];
+		}
+		data->sound[0] = getCurrentSound();
+		data->temp[0] = getCurrentTemp();
+
+		sleep(1);
+	}
+}
+
+
+int oled_thread(int* showMax)
 {
 	xil_printf("-----Starting oled thread ------\r\n");
 	PmodOLED oledDevice;
@@ -226,17 +253,15 @@ int oled_thread(bool* minTemp)
 		OLED_SetCursor(&oledDevice, 0, 0);
 		char buff_indication[40] ;
 		char buff_value[10];
-		if (*minTemp)
-		{
-
-			strcpy(buff_indication, "Temp min: ");
-			sprintf(buff_value, "%d C", getMinTemp());
-
-		}
-		else
+		if (*showMax)
 		{
 			strcpy(buff_indication, "Temp max: ");
 			sprintf(buff_value, "%d C", getMaxTemp());
+		}
+		else
+		{
+			strcpy(buff_indication, "Temp min: ");
+			sprintf(buff_value, "%d C", getMinTemp());
 		}
 		strcat(buff_indication, buff_value);
 
@@ -246,7 +271,7 @@ int oled_thread(bool* minTemp)
 
 		OLED_Update(&oledDevice);
 
-		*minTemp = !*minTemp;
+		//*minTemp = !*minTemp;
 
 		sleep(1);
 	}
@@ -259,12 +284,17 @@ int oled_thread(bool* minTemp)
 
 int main()
 {
-	bool minTemp = false;
 
-	sys_thread_new("main_thread", (void(*)(void*))main_thread, 0,
+	webServerShare data;
+	data.showMax = 1;
+
+	sys_thread_new("main_thread", (void(*)(void*))main_thread, &data,
 			MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
 
-	sys_thread_new("oled_thread", (void(*)(void*))oled_thread, &minTemp,
+	sys_thread_new("oled_thread", (void(*)(void*))oled_thread, &(data.showMax),
+				MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
+
+	sys_thread_new("archive_thread", (void(*)(void*))archive_thread, &(data.archive),
 				MAIN_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
 
 

@@ -17,8 +17,6 @@ const TableItems = ({props}) => {
 };
 
 export const TableWrapper = ({ data, ...props }) => {
-  console.log(data);
-
   const arrayDataType = [];
  
   Object.keys(data).map((item) => {
