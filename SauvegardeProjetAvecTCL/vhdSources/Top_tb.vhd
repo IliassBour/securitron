@@ -119,7 +119,7 @@ architecture Behavioral of Top_tb is
     
     component traitement_temp_moy is
     Port (
-        i_clk                         : in    std_logic;
+--        i_clk                         : in    std_logic;
         i_strobe                      : in    std_logic;
         i_reset                       : in    std_logic;
         i_data_echantillon            : in    std_logic_vector(11 downto 0);
@@ -222,7 +222,7 @@ end process;
     
     temp_moy: traitement_temp_moy 
         Port map (
-        i_clk => clk_5MHz,
+--        i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
         i_data_echantillon => d_echantillon,

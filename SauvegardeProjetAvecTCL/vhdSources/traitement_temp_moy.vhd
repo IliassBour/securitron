@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity traitement_temp_moy is
 Port (
-    i_clk                         : in    std_logic;
+--    i_clk                         : in    std_logic;
     i_strobe                      : in    std_logic;
     i_reset                       : in    std_logic;
     i_data_echantillon            : in    std_logic_vector(11 downto 0);
@@ -43,45 +43,33 @@ end traitement_temp_moy;
 
 architecture Behavioral of traitement_temp_moy is
 
-component reg_dec_donnees is
-Port (
-    i_clk       : in std_logic;      -- horloge
-    i_reset     : in std_logic;      -- reinitialisation
-    i_en        : in std_logic;      -- activation decalage
-    i_data      : in std_logic_vector(7 downto 0);     -- entree serie
-    o_data      : out  std_logic_vector(127 downto 0);   -- sortie parallele
-    o_data_prev : out std_logic_vector(7 downto 0)  -- dernière donnée du registre
-);
-end component;
-
-    signal s_donnees_registre      : std_logic_vector(127 downto 0) := (others => '0');
-    signal s_somme, s_somme_copy   : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
-    signal s_data_echantillon_copy : std_logic_vector(7 downto 0) := (others => '0');
-    signal s_moyenne               : std_logic_vector(7 downto 0) := (others => '0');
-    signal s_data_prev             : std_logic_vector(7 downto 0) := x"00";
+    signal s_donnees                            : std_logic_vector(39 downto 0) := (others => '0');    -- 5*8 bits
+    signal s_somme                              : unsigned(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_premiere_valeur                    : std_logic := '1';
+    signal s_moyenne                            : unsigned(11 downto 0) := (others => '0');
 
 begin
-    
-    registre : reg_dec_donnees
-    port map (
-        i_clk => i_clk,
-        i_reset => i_reset,
-        i_en => i_strobe,
-        i_data => i_data_echantillon(11 downto 4),
-        o_data => s_donnees_registre,
-        o_data_prev => s_data_prev
-    );  
-    
-    process(i_reset, i_strobe, i_clk)
-    begin
-        if falling_edge(i_strobe) then
-            s_somme_copy <= s_somme;
-            s_data_echantillon_copy <= i_data_echantillon(11 downto 4);
-        end if;
-        s_somme <= s_somme_copy + RESIZE(signed(s_data_echantillon_copy), 12) - RESIZE(signed(s_data_prev), 12);          
-        s_moyenne <= std_logic_vector(s_somme(11 downto 4));
-    end process;
-           
-    o_data_temp_moy <= s_moyenne & x"0";--s_donnees_registre(7 downto 0) & x"0";--
 
+    process(i_data_echantillon)
+    begin
+        if(i_reset = '1') then
+            s_donnees <= (others => '0');
+        elsif (i_strobe = '1') then
+            if(s_premiere_valeur = '1') then
+                s_premiere_valeur <= '0';
+                s_donnees <= i_data_echantillon(11 downto 4) & i_data_echantillon(11 downto 4) & i_data_echantillon(11 downto 4) & i_data_echantillon(11 downto 4) & i_data_echantillon(11 downto 4);
+            else
+                s_donnees(39 downto 8) <= s_donnees(31 downto 0);
+                s_donnees(7 downto 0) <= i_data_echantillon(11 downto 4); 
+            end if;
+        end if;
+    end process;
+    s_somme <=  RESIZE(unsigned(s_donnees(39 downto 32)),12) +
+                RESIZE(unsigned(s_donnees(31 downto 24)),12) +
+                RESIZE(unsigned(s_donnees(23 downto 16)),12) +
+                RESIZE(unsigned(s_donnees(15 downto 8)), 12) +
+                RESIZE(unsigned(s_donnees(7 downto 0)),  12);
+    s_moyenne <= s_somme / 5;
+    
+    o_data_temp_moy <= std_logic_vector(s_moyenne(7 downto 0)) & x"0";
 end Behavioral;
