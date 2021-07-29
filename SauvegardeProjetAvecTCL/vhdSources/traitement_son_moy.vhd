@@ -54,7 +54,7 @@ Port (
 end component;
 
     signal s_donnees_registre      : std_logic_vector(39 downto 0) := (others => '0');
-    signal s_somme, s_somme_copy   : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_somme, s_somme_copy   : unsigned(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
     signal s_data_echantillon_copy : std_logic_vector(7 downto 0) := (others => '0');
     signal s_moyenne               : std_logic_vector(7 downto 0) := (others => '0');
     
@@ -73,13 +73,15 @@ begin
     begin
         if falling_edge(i_strobe) then
             s_somme_copy <= s_somme;
-            s_data_echantillon_copy <= i_data_echantillon(11 downto 4);
         end if;
-        --s_somme <= s_somme_copy + RESIZE(signed(s_data_echantillon_copy), 12) - RESIZE(signed(s_data_prev), 12);
-        s_somme <= x"FFF";          
-        s_moyenne <= std_logic_vector(s_somme(11 downto 4));
     end process;
-           
+    s_somme <= resize(unsigned(s_donnees_registre(39 downto 32)), 12) +
+               resize(unsigned(s_donnees_registre(31 downto 24)), 12) +
+               resize(unsigned(s_donnees_registre(23 downto 16)), 12) +
+               resize(unsigned(s_donnees_registre(15 downto 8)), 12) +
+               resize(unsigned(s_donnees_registre(7 downto 0)), 12);
+                      
+    s_moyenne <= std_logic_vector(resize((s_somme / 5), 8));       
     o_data_son_moy <= s_moyenne & x"0" ;
 
 end Behavioral;

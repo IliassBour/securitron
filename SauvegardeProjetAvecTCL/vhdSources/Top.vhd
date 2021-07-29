@@ -105,11 +105,6 @@ architecture Behavioral of Top is
         i_strobe                      : in    std_logic;
         i_reset                       : in    std_logic;
         i_data_echantillon            : in    std_logic_vector(11 downto 0);
-        o_s_1                         : out   std_logic_vector(7 downto 0);
-    o_s_2                         : out   std_logic_vector(7 downto 0);
-    o_s_3                         : out   std_logic_vector(7 downto 0);
-    o_s_4                         : out   std_logic_vector(7 downto 0);
-    o_s_5                         : out   std_logic_vector(7 downto 0);
         o_data_temp_moy               : out   std_logic_vector(11 downto 0)
       );
     end component;
@@ -293,11 +288,6 @@ begin
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
         i_data_echantillon => d_echantillon_temp,
-        o_s_1 => d_s_1(11 downto 4),
-        o_s_2 => d_s_2(11 downto 4),
-        o_s_3 => d_s_3(11 downto 4),
-        o_s_4 => d_s_4(11 downto 4),
-        o_s_5 => d_s_5(11 downto 4),
         o_data_temp_moy => d_temp_moy
     );
       
@@ -398,13 +388,13 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_son => d_str,--d_echantillon_son,
+        i_data_son => d_echantillon_son,
         i_data_temp => d_echantillon_temp,
-        i_son_max => d_s_1,--d_son_max,--d_data_copy_tb,--
-        i_son_min => d_s_2,--d_son_min, --d_somme_tmp_tb,--
-        i_son_moy => d_s_3,---d_son_moy,
-        i_temp_max => d_s_4,--d_temp_max,--d_somme_tb,--
-        i_temp_min => d_s_5,--d_temp_min,--d_somme_copy_tb,--
+        i_son_max => d_son_max,
+        i_son_min => d_son_min,
+        i_son_moy => d_son_moy,
+        i_temp_max => d_temp_max,
+        i_temp_min => d_temp_min,
         i_temp_moy => d_temp_moy,
         i_sw_tri_i => i_sw,
         o_data_out => open,
