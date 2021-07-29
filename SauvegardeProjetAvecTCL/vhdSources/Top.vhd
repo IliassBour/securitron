@@ -101,16 +101,16 @@ architecture Behavioral of Top is
     
     component traitement_temp_moy is
       port (
---        i_clk                         : in    std_logic;
+        i_clk                         : in    std_logic;
         i_strobe                      : in    std_logic;
         i_reset                       : in    std_logic;
         i_data_echantillon            : in    std_logic_vector(11 downto 0);
+        o_s_1                         : out   std_logic_vector(7 downto 0);
+    o_s_2                         : out   std_logic_vector(7 downto 0);
+    o_s_3                         : out   std_logic_vector(7 downto 0);
+    o_s_4                         : out   std_logic_vector(7 downto 0);
+    o_s_5                         : out   std_logic_vector(7 downto 0);
         o_data_temp_moy               : out   std_logic_vector(11 downto 0)
-        -- Tests
---    o_somme_tb          : out std_logic_vector(11 downto 0);
---    o_somme_copy_tb     : out std_logic_vector(11 downto 0);
---    o_data_copy_tb      : out std_logic_vector(7 downto 0);
---    o_somme_tmp_tb      : out std_logic_vector(11 downto 0)
       );
     end component;
     
@@ -234,10 +234,12 @@ architecture Behavioral of Top is
     signal d_S_1Hz_minus_1 : std_logic;
     
     --TESTS
-    signal d_somme_tb : std_logic_vector(11 downto 0) := x"000";
-    signal d_somme_copy_tb : std_logic_vector(11 downto 0) := x"000";
-    signal d_data_copy_tb : std_logic_vector(11 downto 0) := x"000";
-    signal d_somme_tmp_tb : std_logic_vector(11 downto 0) := x"000";
+    signal d_s_1                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_2                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_3                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_4                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_5                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_str                         :   std_logic_vector(11 downto 0);
 begin
     reset    <= i_btn(0);
     d_reset <= reset or reset_1min;
@@ -287,9 +289,15 @@ begin
     
     Temp_moy : traitement_temp_moy
     port map(
+        i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
         i_data_echantillon => d_echantillon_temp,
+        o_s_1 => d_s_1(11 downto 4),
+        o_s_2 => d_s_2(11 downto 4),
+        o_s_3 => d_s_3(11 downto 4),
+        o_s_4 => d_s_4(11 downto 4),
+        o_s_5 => d_s_5(11 downto 4),
         o_data_temp_moy => d_temp_moy
     );
       
@@ -354,7 +362,7 @@ begin
     end process;
     
     strobe_DAC <= strobe_1Hz and (not d_S_1Hz_minus_1);
-    
+    d_str <= "00000000000" & d_echantillon_pret_strobe;
     o_ledtemoin_b <= strobe_1Hz;
 --    o_leds <= d_echantillon (3 downto 0);
 --    Pmod_8LD <= d_echantillon (11 downto 4);
@@ -390,13 +398,13 @@ begin
         Pmod_8LD_pin8_io => Pmod_8LD(5),
         Pmod_8LD_pin9_io => Pmod_8LD(6),
         Pmod_8LD_pin10_io => Pmod_8LD(7),
-        i_data_son => d_echantillon_son,
+        i_data_son => d_str,--d_echantillon_son,
         i_data_temp => d_echantillon_temp,
-        i_son_max => d_son_max,--d_data_copy_tb,--
-        i_son_min => d_son_min, --d_somme_tmp_tb,--
-        i_son_moy => d_son_moy,
-        i_temp_max => d_temp_max,--d_somme_tb,--
-        i_temp_min => d_temp_min,--d_somme_copy_tb,--
+        i_son_max => d_s_1,--d_son_max,--d_data_copy_tb,--
+        i_son_min => d_s_2,--d_son_min, --d_somme_tmp_tb,--
+        i_son_moy => d_s_3,---d_son_moy,
+        i_temp_max => d_s_4,--d_temp_max,--d_somme_tb,--
+        i_temp_min => d_s_5,--d_temp_min,--d_somme_copy_tb,--
         i_temp_moy => d_temp_moy,
         i_sw_tri_i => i_sw,
         o_data_out => open,

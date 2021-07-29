@@ -119,10 +119,15 @@ architecture Behavioral of Top_tb is
     
     component traitement_temp_moy is
     Port (
---        i_clk                         : in    std_logic;
+        i_clk                         : in    std_logic;
         i_strobe                      : in    std_logic;
         i_reset                       : in    std_logic;
         i_data_echantillon            : in    std_logic_vector(11 downto 0);
+        o_s_1                         : out   std_logic_vector(7 downto 0);
+    o_s_2                         : out   std_logic_vector(7 downto 0);
+    o_s_3                         : out   std_logic_vector(7 downto 0);
+    o_s_4                         : out   std_logic_vector(7 downto 0);
+    o_s_5                         : out   std_logic_vector(7 downto 0);
         o_data_temp_moy               : out   std_logic_vector(11 downto 0)
     );
     end component;
@@ -180,6 +185,12 @@ architecture Behavioral of Top_tb is
     
     --Temp
     signal d_temp_moy : std_logic_vector (11 downto 0);
+    --TESTS
+    signal d_s_1                         :   std_logic_vector(7 downto 0);
+    signal d_s_2                         :   std_logic_vector(7 downto 0);
+    signal d_s_3                         :   std_logic_vector(7 downto 0);
+    signal d_s_4                         :   std_logic_vector(7 downto 0);
+    signal d_s_5                         :   std_logic_vector(7 downto 0);
 begin
 
 process
@@ -222,10 +233,15 @@ end process;
     
     temp_moy: traitement_temp_moy 
         Port map (
---        i_clk => clk_5MHz,
+        i_clk => clk_5MHz,
         i_strobe => d_echantillon_pret_strobe,
         i_reset => reset,
         i_data_echantillon => d_echantillon,
+        o_s_1 => d_s_1,
+        o_s_2 => d_s_2,
+        o_s_3 => d_s_3,
+        o_s_4 => d_s_4,
+        o_s_5 => d_s_5,
         o_data_temp_moy => d_temp_moy
     );
       
@@ -267,7 +283,7 @@ end process;
         end if;
     end process;
     
-    strobe_DAC <= d_strobe_100Hz and (not d_S_1Hz_minus_1);
+    strobe_DAC <= d_strobe_100Hz; --and (not d_S_1Hz_minus_1);
 
 --UUT : Top
 --port map(

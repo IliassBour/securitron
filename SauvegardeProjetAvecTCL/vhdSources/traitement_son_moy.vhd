@@ -49,16 +49,14 @@ Port (
     i_reset     : in std_logic;      -- reinitialisation
     i_en        : in std_logic;      -- activation decalage
     i_data      : in std_logic_vector(7 downto 0);     -- entree serie
-    o_data      : out  std_logic_vector(127 downto 0);   -- sortie parallele
-    o_data_prev : out std_logic_vector(7 downto 0)  -- dernière donnée du registre
+    o_data      : out  std_logic_vector(39 downto 0)   -- sortie parallele
 );
 end component;
 
-    signal s_donnees_registre      : std_logic_vector(127 downto 0) := (others => '0');
+    signal s_donnees_registre      : std_logic_vector(39 downto 0) := (others => '0');
     signal s_somme, s_somme_copy   : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
     signal s_data_echantillon_copy : std_logic_vector(7 downto 0) := (others => '0');
     signal s_moyenne               : std_logic_vector(7 downto 0) := (others => '0');
-    signal s_data_prev             : std_logic_vector(7 downto 0) := x"00";
     
 begin
     
@@ -68,8 +66,7 @@ begin
         i_reset => i_reset,
         i_en => i_strobe,
         i_data => i_data_echantillon(11 downto 4),
-        o_data => s_donnees_registre,
-        o_data_prev => s_data_prev
+        o_data => s_donnees_registre
     );
 
     process(i_reset, i_strobe, i_clk)
@@ -78,7 +75,8 @@ begin
             s_somme_copy <= s_somme;
             s_data_echantillon_copy <= i_data_echantillon(11 downto 4);
         end if;
-        s_somme <= s_somme_copy + RESIZE(signed(s_data_echantillon_copy), 12) - RESIZE(signed(s_data_prev), 12);          
+        --s_somme <= s_somme_copy + RESIZE(signed(s_data_echantillon_copy), 12) - RESIZE(signed(s_data_prev), 12);
+        s_somme <= x"FFF";          
         s_moyenne <= std_logic_vector(s_somme(11 downto 4));
     end process;
            

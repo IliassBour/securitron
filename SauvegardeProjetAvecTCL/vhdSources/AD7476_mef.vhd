@@ -48,6 +48,8 @@ begin
     when Init =>
         if (i_ADC_Strobe = '1') then 
             etat_suivant <= w0;
+        else
+            etat_suivant <= Init;
         end if;
     when w0 =>
             etat_suivant <= w1;
