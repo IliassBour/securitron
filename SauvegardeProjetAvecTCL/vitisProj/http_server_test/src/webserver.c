@@ -41,7 +41,7 @@ extern void print_ip(char *msg, ip_addr_t *ip);
 
 extern struct netif server_netif;
 
-void process_http_request(int sd)
+void process_http_request(int sd, webServerShare *data)
 {
 	int read_len;
 	int RECV_BUF_SIZE = 1400;  /* http request size can be a max of RECV_BUF_SIZE */
@@ -57,13 +57,13 @@ void process_http_request(int sd)
 	//xil_printf("avg sound process_http_request: %d\r\n", data->avgSound);
 
 	/* respond to request */
-	generate_response(sd, recv_buf, read_len);
+	generate_response(sd, recv_buf, read_len, data);
 
 	/* close connection */
 	close(sd);
 }
 
-void start_application()
+void start_application(webServerShare *data)
 {
 	int sock, new_sd;
 	int size = sizeof(struct sockaddr_in);
@@ -101,7 +101,7 @@ void start_application()
 	while (1) {
 		new_sd = lwip_accept(sock, (struct sockaddr *)&remote,
 					(socklen_t *)&size);
-		process_http_request(new_sd);
+		process_http_request(new_sd, data);
 	}
 }
 

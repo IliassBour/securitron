@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Exercice1 Atelier #3 S4 Génie informatique - H21
+-- Exercice1 Atelier #3 S4 Gï¿½nie informatique - H21
 -- Larissa Njejimana
 -- v.3 
 ----------------------------------------------------------------------------------
@@ -66,15 +66,15 @@ architecture Behavioral of Top is
     component Ctrl_AD1 is
     port ( 
         reset                       : in    std_logic;  
-        clk_ADC                     : in    std_logic; 						-- Horloge à fournir à l'ADC
-        i_DO_sound                  : in    std_logic;                -- Bit de donnée en provenance de l'ADC pour le son
-        i_DO_temp                   : in    std_logic;                -- Bit de donnée en provenance de l'ADC pour la température    
+        clk_ADC                     : in    std_logic; 						-- Horloge ï¿½ fournir ï¿½ l'ADC
+        i_DO_sound                  : in    std_logic;                -- Bit de donnï¿½e en provenance de l'ADC pour le son
+        i_DO_temp                   : in    std_logic;                -- Bit de donnï¿½e en provenance de l'ADC pour la tempï¿½rature    
         o_ADC_nCS                   : out   std_logic;                      -- Signal Chip select vers l'ADC 
         
-        i_ADC_Strobe                : in    std_logic;                      -- Synchronisation: strobe déclencheur de la séquence de réception    
-        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une réception complète d'un échantillon  
-        o_echantillon_sound         : out   std_logic_vector (11 downto 0); -- valeur de l'échantillon reçu son
-        o_echantillon_temp          : out   std_logic_vector (11 downto 0) -- valeur de l'échantillon reçu température
+        i_ADC_Strobe                : in    std_logic;                      -- Synchronisation: strobe dï¿½clencheur de la sï¿½quence de rï¿½ception    
+        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon  
+        o_echantillon_sound         : out   std_logic_vector (11 downto 0); -- valeur de l'ï¿½chantillon reï¿½u son
+        o_echantillon_temp          : out   std_logic_vector (11 downto 0) -- valeur de l'ï¿½chantillon reï¿½u tempï¿½rature
     );
     end  component;
     
@@ -123,7 +123,7 @@ architecture Behavioral of Top is
     component Synchro_Horloges is
     generic (const_CLK_syst_MHz: integer := freq_sys_MHz);
     Port ( 
-        clkm        : in  std_logic;  -- Entrée  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
+        clkm        : in  std_logic;  -- Entrï¿½e  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
         o_S_5MHz    : out std_logic;  -- source horloge divisee          (clkm MHz / (2*constante_diviseur_p +2) devrait donner 5 MHz soit 200 ns)
         o_CLK_5MHz  : out std_logic;
         o_S_100Hz   : out  std_logic; -- source horloge 100 Hz : out  std_logic;   -- (100  Hz approx:  99,952 Hz) 
@@ -172,14 +172,14 @@ architecture Behavioral of Top is
         FIXED_IO_ps_clk : inout STD_LOGIC;
         FIXED_IO_ps_porb : inout STD_LOGIC;
         FIXED_IO_ps_srstb : inout STD_LOGIC;
-        Pmod_8LD_pin10_io : inout STD_LOGIC;
-        Pmod_8LD_pin1_io : inout STD_LOGIC;
-        Pmod_8LD_pin2_io : inout STD_LOGIC;
-        Pmod_8LD_pin3_io : inout STD_LOGIC;
-        Pmod_8LD_pin4_io : inout STD_LOGIC;
-        Pmod_8LD_pin7_io : inout STD_LOGIC;
-        Pmod_8LD_pin8_io : inout STD_LOGIC;
-        Pmod_8LD_pin9_io : inout STD_LOGIC;
+        Pmod_OLED_pin10_io : inout STD_LOGIC;
+        Pmod_OLED_pin1_io : inout STD_LOGIC;
+        Pmod_OLED_pin2_io : inout STD_LOGIC;
+        Pmod_OLED_pin3_io : inout STD_LOGIC;
+        Pmod_OLED_pin4_io : inout STD_LOGIC;
+        Pmod_OLED_pin7_io : inout STD_LOGIC;
+        Pmod_OLED_pin8_io : inout STD_LOGIC;
+        Pmod_OLED_pin9_io : inout STD_LOGIC;
         i_data_son : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_data_temp : in STD_LOGIC_VECTOR ( 11 downto 0 );
         i_son_max : in STD_LOGIC_VECTOR ( 11 downto 0 );
@@ -193,6 +193,18 @@ architecture Behavioral of Top is
         o_leds_tri_o : out STD_LOGIC_VECTOR ( 3 downto 0 )
       );
     end component;
+    
+    component Pblaze_uCtrler
+    port (
+    clk                     : in std_logic;
+    i_ADC_echantillon       : in std_logic_vector (11 downto 0); 
+    i_ADC_echantillon_pret  : in std_logic;
+    o_compteur              : out std_logic_vector(3 downto 0);
+    o_echantillon_out       : out std_logic_vector(7 downto 0);
+    o_echantillon_outMax    : out std_logic_vector(7 downto 0)
+   
+  );
+  end component;
     
     --signaux 
     
@@ -237,7 +249,7 @@ architecture Behavioral of Top is
     signal d_str                         :   std_logic_vector(11 downto 0);
 begin
     reset    <= i_btn(0);
-    d_reset <= reset or reset_1min;
+    d_reset <= reset;-- or reset_1min;
         
 --     mux_select_Entree_AD1 : process (i_btn(3), i_ADC_D0, i_ADC_D1)
 --     begin
@@ -253,13 +265,13 @@ begin
         reset                       => reset,
         
         clk_ADC                     => clk_5MHz,                    -- pour horloge externe de l'ADC 
-        i_DO_sound                  => i_ADC_D0,               -- bit de données du son     
-        i_DO_temp                  => i_ADC_D1,               -- bit de données de la température      
+        i_DO_sound                  => i_ADC_D0,               -- bit de donnï¿½es du son     
+        i_DO_temp                  => i_ADC_D1,               -- bit de donnï¿½es de la tempï¿½rature      
         o_ADC_nCS                   => o_ADC_NCS,                   -- chip select pour le convertisseur (ADC )
         
-        i_ADC_Strobe                => strobe_ADC,              -- synchronisation: déclencheur de la séquence d'échantillonnage 
-        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une réception complète d'un échantillon 
-        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'échantillon reçu (12 bits)
+        i_ADC_Strobe                => strobe_ADC,              -- synchronisation: dï¿½clencheur de la sï¿½quence d'ï¿½chantillonnage 
+        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon 
+        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'ï¿½chantillon reï¿½u (12 bits)
         o_echantillon_temp          => d_echantillon_temp
     );
 
@@ -380,14 +392,14 @@ begin
         FIXED_IO_ps_clk => FIXED_IO_ps_clk,
         FIXED_IO_ps_porb => FIXED_IO_ps_porb,
         FIXED_IO_ps_srstb => FIXED_IO_ps_srstb,
-        Pmod_8LD_pin1_io => Pmod_8LD(0),
-        Pmod_8LD_pin2_io => Pmod_8LD(1),
-        Pmod_8LD_pin3_io => Pmod_8LD(2),
-        Pmod_8LD_pin4_io => Pmod_8LD(3),
-        Pmod_8LD_pin7_io => Pmod_8LD(4),
-        Pmod_8LD_pin8_io => Pmod_8LD(5),
-        Pmod_8LD_pin9_io => Pmod_8LD(6),
-        Pmod_8LD_pin10_io => Pmod_8LD(7),
+        Pmod_OLED_pin1_io => Pmod_OLED(0),
+        Pmod_OLED_pin2_io => Pmod_OLED(1),
+        Pmod_OLED_pin3_io => Pmod_OLED(2),
+        Pmod_OLED_pin4_io => Pmod_OLED(3),
+        Pmod_OLED_pin7_io => Pmod_OLED(4),
+        Pmod_OLED_pin8_io => Pmod_OLED(5),
+        Pmod_OLED_pin9_io => Pmod_OLED(6),
+        Pmod_OLED_pin10_io => Pmod_OLED(7),
         i_data_son => d_echantillon_son,
         i_data_temp => d_echantillon_temp,
         i_son_max => d_son_max,
@@ -400,5 +412,16 @@ begin
         o_data_out => open,
         o_leds_tri_o => o_leds
     );
+
+    PblazeMin: Pblaze_uCtrler
+    port map(
+        clk                     => clk_5MHz,
+        i_ADC_echantillon       => d_echantillon_son,
+        i_ADC_echantillon_pret  => d_echantillon_pret_strobe,
+        o_compteur              => open,
+        o_echantillon_out       => d_son_min(11 downto 4),
+        o_echantillon_outMax    => d_son_max(11 downto 4)
+    );
+
 end Behavioral;
 
