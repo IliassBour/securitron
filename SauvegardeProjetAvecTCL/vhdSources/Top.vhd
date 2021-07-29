@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Exercice1 Atelier #3 S4 Génie informatique - H21
+-- Exercice1 Atelier #3 S4 Gï¿½nie informatique - H21
 -- Larissa Njejimana
 -- v.3 
 ----------------------------------------------------------------------------------
@@ -66,15 +66,15 @@ architecture Behavioral of Top is
     component Ctrl_AD1 is
     port ( 
         reset                       : in    std_logic;  
-        clk_ADC                     : in    std_logic; 						-- Horloge à fournir à l'ADC
-        i_DO_sound                  : in    std_logic;                -- Bit de donnée en provenance de l'ADC pour le son
-        i_DO_temp                   : in    std_logic;                -- Bit de donnée en provenance de l'ADC pour la température    
+        clk_ADC                     : in    std_logic; 						-- Horloge ï¿½ fournir ï¿½ l'ADC
+        i_DO_sound                  : in    std_logic;                -- Bit de donnï¿½e en provenance de l'ADC pour le son
+        i_DO_temp                   : in    std_logic;                -- Bit de donnï¿½e en provenance de l'ADC pour la tempï¿½rature    
         o_ADC_nCS                   : out   std_logic;                      -- Signal Chip select vers l'ADC 
         
-        i_ADC_Strobe                : in    std_logic;                      -- Synchronisation: strobe déclencheur de la séquence de réception    
-        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une réception complète d'un échantillon  
-        o_echantillon_sound         : out   std_logic_vector (11 downto 0); -- valeur de l'échantillon reçu son
-        o_echantillon_temp          : out   std_logic_vector (11 downto 0) -- valeur de l'échantillon reçu température
+        i_ADC_Strobe                : in    std_logic;                      -- Synchronisation: strobe dï¿½clencheur de la sï¿½quence de rï¿½ception    
+        o_echantillon_pret_strobe   : out   std_logic;                      -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon  
+        o_echantillon_sound         : out   std_logic_vector (11 downto 0); -- valeur de l'ï¿½chantillon reï¿½u son
+        o_echantillon_temp          : out   std_logic_vector (11 downto 0) -- valeur de l'ï¿½chantillon reï¿½u tempï¿½rature
     );
     end  component;
     
@@ -123,7 +123,7 @@ architecture Behavioral of Top is
     component Synchro_Horloges is
     generic (const_CLK_syst_MHz: integer := freq_sys_MHz);
     Port ( 
-        clkm        : in  std_logic;  -- Entrée  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
+        clkm        : in  std_logic;  -- Entrï¿½e  horloge maitre   (50 MHz soit 20 ns ou 100 MHz soit 10 ns)
         o_S_5MHz    : out std_logic;  -- source horloge divisee          (clkm MHz / (2*constante_diviseur_p +2) devrait donner 5 MHz soit 200 ns)
         o_CLK_5MHz  : out std_logic;
         o_S_100Hz   : out  std_logic; -- source horloge 100 Hz : out  std_logic;   -- (100  Hz approx:  99,952 Hz) 
@@ -226,7 +226,7 @@ architecture Behavioral of Top is
     signal d_temp_max                   : std_logic_vector (11 downto 0);
 
     signal compteur_en               : std_logic := '0';  -- cadence echantillonnage AD1
-    signal compteur_reset                        : std_logic;
+    signal compteur_reset            : std_logic;
     signal compteur_val              : integer := 0;
     signal strobe_ADC                : std_logic := '0';
     
@@ -239,6 +239,14 @@ architecture Behavioral of Top is
     signal lecture : std_logic := '0';
     signal strobe_DAC : std_logic;
     signal d_S_1Hz_minus_1 : std_logic;
+    
+    --TESTS
+    signal d_s_1                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_2                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_3                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_4                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_s_5                         :   std_logic_vector(11 downto 0) := x"000";
+    signal d_str                         :   std_logic_vector(11 downto 0);
 begin
     reset    <= i_btn(0);
     d_reset <= reset;-- or reset_1min;
@@ -257,13 +265,13 @@ begin
         reset                       => reset,
         
         clk_ADC                     => clk_5MHz,                    -- pour horloge externe de l'ADC 
-        i_DO_sound                  => i_ADC_D0,               -- bit de données du son     
-        i_DO_temp                  => i_ADC_D1,               -- bit de données de la température      
+        i_DO_sound                  => i_ADC_D0,               -- bit de donnï¿½es du son     
+        i_DO_temp                  => i_ADC_D1,               -- bit de donnï¿½es de la tempï¿½rature      
         o_ADC_nCS                   => o_ADC_NCS,                   -- chip select pour le convertisseur (ADC )
         
-        i_ADC_Strobe                => strobe_ADC,              -- synchronisation: déclencheur de la séquence d'échantillonnage 
-        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une réception complète d'un échantillon 
-        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'échantillon reçu (12 bits)
+        i_ADC_Strobe                => strobe_ADC,              -- synchronisation: dï¿½clencheur de la sï¿½quence d'ï¿½chantillonnage 
+        o_echantillon_pret_strobe   => d_echantillon_pret_strobe,   -- strobe indicateur d'une rï¿½ception complï¿½te d'un ï¿½chantillon 
+        o_echantillon_sound         => d_echantillon_son,                -- valeur de l'ï¿½chantillon reï¿½u (12 bits)
         o_echantillon_temp          => d_echantillon_temp
     );
 
@@ -356,7 +364,7 @@ begin
     end process;
     
     strobe_DAC <= strobe_1Hz and (not d_S_1Hz_minus_1);
-    
+    d_str <= "00000000000" & d_echantillon_pret_strobe;
     o_ledtemoin_b <= strobe_1Hz;
 --    o_leds <= d_echantillon (3 downto 0);
 --    Pmod_8LD <= d_echantillon (11 downto 4);
