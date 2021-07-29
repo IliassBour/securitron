@@ -65,7 +65,7 @@ begin
        if(i_data_echantillon(11) = '0') then
             if(signed(i_data_echantillon(11 downto 4)) > -41) then
                 if(q_temp_min(7) = '0' and (unsigned(q_temp_min(7 downto 0)) > unsigned(i_data_echantillon(11 downto 4)))) then
-                    q_temp_min <= i_data_echantillon(10 downto 4) & "0";
+                    q_temp_min <= i_data_echantillon(11 downto 4);
                 end if;
             end if;
             
