@@ -54,7 +54,7 @@ Port (
 end component;
 
     signal s_donnees_registre      : std_logic_vector(39 downto 0) := (others => '0');
-    signal s_somme, s_somme_copy   : unsigned(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_somme, s_somme_copy   : signed(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
     signal s_moyenne                            : std_logic_vector(7 downto 0);
 
 begin
@@ -73,11 +73,11 @@ begin
             s_somme_copy <= s_somme;
         end if;
     end process;
-    s_somme <= unsigned(resize(signed(s_donnees_registre(39 downto 32)), 12)) +
-               unsigned(resize(signed(s_donnees_registre(31 downto 24)), 12)) +
-               unsigned(resize(signed(s_donnees_registre(23 downto 16)), 12)) +
-               unsigned(resize(signed(s_donnees_registre(15 downto 8)), 12)) +
-               unsigned(resize(signed(s_donnees_registre(7 downto 0)), 12));
+    s_somme <= (resize(signed(s_donnees_registre(39 downto 32)), 12)) +
+               (resize(signed(s_donnees_registre(31 downto 24)), 12)) +
+               (resize(signed(s_donnees_registre(23 downto 16)), 12)) +
+               (resize(signed(s_donnees_registre(15 downto 8)), 12)) +
+               (resize(signed(s_donnees_registre(7 downto 0)), 12));
                       
     s_moyenne <= std_logic_vector(resize((s_somme / 5), 8));       
     o_data_temp_moy <= s_moyenne & x"0" ;
