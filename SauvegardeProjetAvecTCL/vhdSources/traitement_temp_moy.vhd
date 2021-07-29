@@ -49,18 +49,15 @@ Port (
     i_reset     : in std_logic;      -- reinitialisation
     i_en        : in std_logic;      -- activation decalage
     i_data      : in std_logic_vector(7 downto 0);     -- entree serie
-    o_data      : out  std_logic_vector(127 downto 0)   -- sortie parallele
+    o_data      : out  std_logic_vector(39 downto 0)   -- sortie parallele
 );
 end component;
 
-    signal s_donnees_registre : std_logic_vector(127 downto 0) := (others => '0');
-    signal s_somme            : std_logic_vector(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
-    signal s_moyenne          : std_logic_vector(7 downto 0) := (others => '0');
-    signal s_mid              : std_logic_vector(11 downto 0) := (others => '0');
-    signal j,n                : integer := 0;
+    signal s_donnees_registre      : std_logic_vector(39 downto 0) := (others => '0');
+    signal s_somme, s_somme_copy   : unsigned(11 downto 0) := (others => '0');  -- Detection d'overflow sur les msb
+    signal s_moyenne                            : std_logic_vector(7 downto 0);
 
 begin
-    
     registre : reg_dec_donnees
     port map (
         i_clk => i_clk,
@@ -70,30 +67,18 @@ begin
         o_data => s_donnees_registre
     );
 
-    process(i_clk, i_strobe, i_reset, s_donnees_registre)
+    process(i_reset, i_strobe, i_clk)
     begin
-        s_somme <= std_logic_vector(signed("0000" & s_donnees_registre(127 downto 120))
-               + signed("0000" & s_donnees_registre(119 downto 112))
-               + signed("0000" & s_donnees_registre(111 downto 104))
-               + signed("0000" & s_donnees_registre(103 downto 96))
-               + signed("0000" & s_donnees_registre(95 downto 88))
-               + signed("0000" & s_donnees_registre(87 downto 80))
-               + signed("0000" & s_donnees_registre(79 downto 72))
-               + signed("0000" & s_donnees_registre(71 downto 64))
-               + signed("0000" & s_donnees_registre(63 downto 56))
-               + signed("0000" & s_donnees_registre(55 downto 48))
-               + signed("0000" & s_donnees_registre(47 downto 40))
-               + signed("0000" & s_donnees_registre(39 downto 32))
-               + signed("0000" & s_donnees_registre(31 downto 24))
-               + signed("0000" & s_donnees_registre(23 downto 16))
-               + signed("0000" & s_donnees_registre(15 downto 8))
-               + signed("0000" & s_donnees_registre(7 downto 0))
-               );
-               
-        --équivalent à shift_right de 4 => diviser par 16   *Prend la donnée floor de la division
-        s_moyenne <= s_somme(11 downto 4); 
+        if falling_edge(i_strobe) then
+            s_somme_copy <= s_somme;
+        end if;
     end process;
-           
-    o_data_temp_moy <= "0000" & s_moyenne;
-
+    s_somme <= unsigned(resize(signed(s_donnees_registre(39 downto 32)), 12)) +
+               unsigned(resize(signed(s_donnees_registre(31 downto 24)), 12)) +
+               unsigned(resize(signed(s_donnees_registre(23 downto 16)), 12)) +
+               unsigned(resize(signed(s_donnees_registre(15 downto 8)), 12)) +
+               unsigned(resize(signed(s_donnees_registre(7 downto 0)), 12));
+                      
+    s_moyenne <= std_logic_vector(resize((s_somme / 5), 8));       
+    o_data_temp_moy <= s_moyenne & x"0" ;
 end Behavioral;
